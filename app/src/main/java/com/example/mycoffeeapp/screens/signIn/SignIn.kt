@@ -84,7 +84,8 @@ fun SignIn(navController: NavController){
                 icon= R.drawable.message )
             MyTextField("Password",
                 keyboardOptions =  KeyboardOptions(keyboardType = KeyboardType.Password),
-                icon= R.drawable.lock )
+                icon= R.drawable.lock,
+                trailingIcon = R.drawable.show)
             Text(
                 text ="Forgot Password?",
                 fontSize = 14.sp,
@@ -97,9 +98,6 @@ fun SignIn(navController: NavController){
             )
             Spacer(modifier = Modifier.height(140.dp))
             MyButton(action = {},modifier = Modifier.align(Alignment.End))
-            Button(onClick = { }) {
-
-            }
             Spacer(modifier = Modifier.height(140.dp))
 
             Text(

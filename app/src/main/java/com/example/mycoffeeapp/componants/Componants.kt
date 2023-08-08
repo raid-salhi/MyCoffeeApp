@@ -108,7 +108,10 @@ fun MyTextField(
                     placeholderColor = Color.LightGray,
                     unfocusedIndicatorColor = Color.White,
                     focusedIndicatorColor = Color.White,
-                    cursorColor = MainText
+                    cursorColor = MainText,
+                    unfocusedTrailingIconColor = MainText,
+                    focusedTrailingIconColor = MainText,
+                    textColor = Color.Black
                 ),
                 singleLine = true,
                 placeholder = {
@@ -123,7 +126,7 @@ fun MyTextField(
                 trailingIcon={
                     if (trailingIcon != null){
                         Icon(
-                            painter=painterResource(id = R.drawable.show),
+                            painter=painterResource(id = trailingIcon),
                             contentDescription = "toggle password",
                             modifier = Modifier.clickable {
                                 visible=!visible
