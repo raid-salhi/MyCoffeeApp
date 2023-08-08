@@ -77,15 +77,16 @@ fun HomeScreen(navController: NavController){
                 },
                 colors = TopAppBarDefaults.smallTopAppBarColors(
                     containerColor = Color.White,
-                    actionIconContentColor = IconColor
+                    actionIconContentColor = IconColor,
                 )
             )
         },
-        containerColor = Color.White
+        containerColor = Color.White,
+
     ) {
         Surface(
             modifier = Modifier
-                .padding(it)
+                .padding(top = it.calculateTopPadding()+10.dp)
                 .fillMaxSize(),
             color = PrimaryColor,
             shape = RoundedCornerShape(topStart = 25.dp, topEnd = 25.dp)
