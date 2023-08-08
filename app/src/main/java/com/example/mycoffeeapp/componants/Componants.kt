@@ -1,6 +1,7 @@
 package com.example.mycoffeeapp.componants
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
@@ -33,6 +34,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.mycoffeeapp.R
@@ -61,6 +64,7 @@ fun MyTextField(
     placeHolder: String,
     keyboardOptions: KeyboardOptions,
     icon: Int,
+    trailingIcon : Int? = null
 
     ) {
     var text by remember {
@@ -70,6 +74,9 @@ fun MyTextField(
         MutableInteractionSource()
     }
     var selected by remember {
+        mutableStateOf(false)
+    }
+    var visible by remember {
         mutableStateOf(false)
     }
     selected = interactionSource.collectIsFocusedAsState().value
@@ -112,7 +119,19 @@ fun MyTextField(
                     )
                 },
                 keyboardOptions = keyboardOptions,
-                interactionSource = interactionSource
+                interactionSource = interactionSource,
+                trailingIcon={
+                    if (trailingIcon != null){
+                        Icon(
+                            painter=painterResource(id = R.drawable.show),
+                            contentDescription = "toggle password",
+                            modifier = Modifier.clickable {
+                                visible=!visible
+                            }
+                        )
+                    }
+                },
+                visualTransformation = if (!visible) VisualTransformation.None else PasswordVisualTransformation()
 
             )
         }
