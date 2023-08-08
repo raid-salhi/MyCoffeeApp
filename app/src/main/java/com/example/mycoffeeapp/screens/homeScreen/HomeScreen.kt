@@ -1,14 +1,17 @@
 package com.example.mycoffeeapp.screens.homeScreen
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SmallTopAppBar
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -27,6 +30,8 @@ import androidx.navigation.NavController
 import com.example.mycoffeeapp.R
 import com.example.mycoffeeapp.ui.theme.IconColor
 import com.example.mycoffeeapp.ui.theme.MainText
+import com.example.mycoffeeapp.ui.theme.PrimaryColor
+import com.example.mycoffeeapp.ui.theme.onPrimaryColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -75,10 +80,27 @@ fun HomeScreen(navController: NavController){
                     actionIconContentColor = IconColor
                 )
             )
-        }
+        },
+        containerColor = Color.White
     ) {
-        Column(Modifier.padding(it)) {
-
+        Surface(
+            modifier = Modifier
+                .padding(it)
+                .fillMaxSize(),
+            color = PrimaryColor,
+            shape = RoundedCornerShape(topStart = 25.dp, topEnd = 25.dp)
+        ) {
+            Column(modifier = Modifier
+                .fillMaxSize()
+                .padding(25.dp)
+            ) {
+                Text(
+                    text = "Select your coffee",
+                    fontSize = 16.sp,
+                    fontFamily = FontFamily(Font(R.font.poppins_regular)),
+                    color = onPrimaryColor
+                )
+            }
         }
     }
 }
