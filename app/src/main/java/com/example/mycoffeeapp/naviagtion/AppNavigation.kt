@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import  com.example.mycoffeeapp.naviagtion.Routes
+import com.example.mycoffeeapp.screens.homeScreen.HomeScreen
 import com.example.mycoffeeapp.screens.signIn.SignIn
 import com.example.mycoffeeapp.screens.signUp.SignUp
 import com.example.mycoffeeapp.screens.splashScreen.SplashScreen
@@ -21,13 +22,13 @@ fun AppNavigation(){
     systemUiController.setSystemBarsColor(
         color = if (navController.currentBackStackEntryAsState().value?.destination?.route !=Routes.SplashScreen.name) Color.White else Color.Black
     )
-    NavHost(navController = navController, startDestination = Routes.SplashScreen.name){
+    NavHost(navController = navController, startDestination = Routes.HomeScreen.name){
 
         composable(route = Routes.SplashScreen.name){
             SplashScreen(navController = navController)
         }
         composable(route = Routes.HomeScreen.name){
-
+            HomeScreen(navController = navController)
         }
         composable(route = Routes.SignInScreen.name){
             SignIn(navController = navController)

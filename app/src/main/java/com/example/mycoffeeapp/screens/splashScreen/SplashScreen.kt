@@ -31,6 +31,7 @@ fun SplashScreen(navController: NavController) {
     LaunchedEffect(key1 = true, block = {
         delay(500)
         navController.navigate(Routes.SignInScreen.name)
+        navController.popBackStack()
     })
     Box(modifier =Modifier.fillMaxSize() ){
         Image(
