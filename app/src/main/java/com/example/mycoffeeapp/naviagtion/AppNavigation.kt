@@ -1,7 +1,10 @@
 package com.example.mycoffeeapp.naviagtion
 
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -14,6 +17,7 @@ import com.example.mycoffeeapp.screens.signUp.SignUp
 import com.example.mycoffeeapp.screens.splashScreen.SplashScreen
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppNavigation(){
 
@@ -22,19 +26,26 @@ fun AppNavigation(){
     systemUiController.setSystemBarsColor(
         color = if (navController.currentBackStackEntryAsState().value?.destination?.route !=Routes.SplashScreen.name) Color.White else Color.Black
     )
-    NavHost(navController = navController, startDestination = Routes.HomeScreen.name){
+    Scaffold(
+        bottomBar = {
 
-        composable(route = Routes.SplashScreen.name){
-            SplashScreen(navController = navController)
         }
-        composable(route = Routes.HomeScreen.name){
-            HomeScreen(navController = navController)
-        }
-        composable(route = Routes.SignInScreen.name){
-            SignIn(navController = navController)
-        }
-        composable(route = Routes.SignUpScreen.name){
-            SignUp(navController = navController)
+    ) {
+        NavHost(navController = navController, startDestination = Routes.HomeScreen.name, modifier = Modifier.padding(it)){
+
+            composable(route = Routes.SplashScreen.name){
+                SplashScreen(navController = navController)
+            }
+            composable(route = Routes.HomeScreen.name){
+                HomeScreen(navController = navController)
+            }
+            composable(route = Routes.SignInScreen.name){
+                SignIn(navController = navController)
+            }
+            composable(route = Routes.SignUpScreen.name){
+                SignUp(navController = navController)
+            }
         }
     }
+
 }
