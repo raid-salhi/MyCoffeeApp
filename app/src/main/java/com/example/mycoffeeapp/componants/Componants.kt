@@ -39,6 +39,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.mycoffeeapp.R
+import com.example.mycoffeeapp.ui.theme.IconColor
 import com.example.mycoffeeapp.ui.theme.MainText
 import com.example.mycoffeeapp.ui.theme.PrimaryColor
 
@@ -109,8 +110,8 @@ fun MyTextField(
                     unfocusedIndicatorColor = Color.White,
                     focusedIndicatorColor = Color.White,
                     cursorColor = MainText,
-                    unfocusedTrailingIconColor = MainText,
-                    focusedTrailingIconColor = MainText,
+                    unfocusedTrailingIconColor = IconColor,
+                    focusedTrailingIconColor = IconColor,
                     textColor = Color.Black
                 ),
                 singleLine = true,

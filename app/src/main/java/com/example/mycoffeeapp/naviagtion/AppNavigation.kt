@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import  com.example.mycoffeeapp.naviagtion.Routes
 import com.example.mycoffeeapp.screens.signIn.SignIn
+import com.example.mycoffeeapp.screens.signUp.SignUp
 import com.example.mycoffeeapp.screens.splashScreen.SplashScreen
 
 @Composable
@@ -24,7 +25,7 @@ fun AppNavigation(){
             SignIn(navController = navController)
         }
         composable(route = Routes.SignUpScreen.name){
-
+            SignUp(navController = navController)
         }
     }
 }
