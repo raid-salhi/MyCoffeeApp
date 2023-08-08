@@ -1,5 +1,6 @@
 package com.example.mycoffeeapp.naviagtion
 
+import android.view.Window
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -10,6 +11,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.mycoffeeapp.MainActivity
 import  com.example.mycoffeeapp.naviagtion.Routes
 import com.example.mycoffeeapp.screens.homeScreen.HomeScreen
 import com.example.mycoffeeapp.screens.signIn.SignIn
@@ -27,9 +29,6 @@ fun AppNavigation(){
         color = if (navController.currentBackStackEntryAsState().value?.destination?.route !=Routes.SplashScreen.name) Color.White else Color.Black
     )
     Scaffold(
-        bottomBar = {
-
-        }
     ) {
         NavHost(navController = navController, startDestination = Routes.HomeScreen.name, modifier = Modifier.padding(it)){
 
