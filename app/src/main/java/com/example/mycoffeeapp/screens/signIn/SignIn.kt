@@ -51,6 +51,8 @@ import androidx.navigation.NavController
 import androidx.room.util.newStringBuilder
 import com.example.mycoffeeapp.ui.theme.MainText
 import com.example.mycoffeeapp.R
+import com.example.mycoffeeapp.componants.MyButton
+import com.example.mycoffeeapp.componants.MyTextField
 import com.example.mycoffeeapp.naviagtion.Routes
 import com.example.mycoffeeapp.ui.theme.PrimaryColor
 
@@ -94,18 +96,9 @@ fun SignIn(navController: NavController){
                     .align(Alignment.CenterHorizontally)
             )
             Spacer(modifier = Modifier.height(140.dp))
-            Button(
-                onClick = { /*TODO*/ },
-                shape = CircleShape,
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = PrimaryColor,
-                    contentColor = Color.White
-                ),
-                modifier = Modifier
-                    .size(64.dp)
-                    .align(Alignment.End)
-            ) {
-                Icon(painter = painterResource(id = R.drawable.arrow___right), contentDescription = "next", modifier = Modifier.fillMaxSize())
+            MyButton(action = {},modifier = Modifier.align(Alignment.End))
+            Button(onClick = { }) {
+
             }
             Spacer(modifier = Modifier.height(140.dp))
 
@@ -134,72 +127,3 @@ fun SignIn(navController: NavController){
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun MyTextField(
-    placeHolder: String,
-    keyboardOptions: KeyboardOptions,
-    icon: Int,
-
-    ) {
-    var text by remember {
-        mutableStateOf("")
-    }
-    val interactionSource = remember {
-        MutableInteractionSource()
-    }
-    var selected by remember {
-        mutableStateOf(false)
-    }
-    selected = interactionSource.collectIsFocusedAsState().value
-    Column (
-        modifier=Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ){
-        Row(
-            horizontalArrangement = Arrangement.Start,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(
-                painter = painterResource(id = icon),
-                contentDescription = "icon",
-                tint= MainText,
-                modifier = Modifier.padding(end=10.dp))
-            Box(modifier = Modifier
-                .width(1.dp)
-                .height(20.dp)
-                .background(color = if (selected) MainText else Color.LightGray))
-            TextField(
-                value = text,
-                onValueChange ={
-                    text=it
-                },
-                colors = TextFieldDefaults.textFieldColors(
-                    containerColor = Color.White,
-                    placeholderColor = Color.LightGray,
-                    unfocusedIndicatorColor = Color.White,
-                    focusedIndicatorColor = Color.White,
-                    cursorColor = MainText
-                ),
-                singleLine = true,
-                placeholder = {
-                    Text(
-                        text = placeHolder,
-                        fontFamily = FontFamily(Font(R.font.poppins_regular)),
-                        fontSize = 16.sp
-                    )
-                },
-                keyboardOptions = keyboardOptions,
-                interactionSource = interactionSource
-
-            )
-        }
-        Box(modifier = Modifier
-            .height(1.dp)
-            .fillMaxWidth()
-            .background(color = if (selected) MainText else Color.LightGray))
-    }
-
-
-}
