@@ -1,10 +1,21 @@
 package com.example.mycoffeeapp.screens.homeScreen
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -16,8 +27,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -28,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.mycoffeeapp.R
+import com.example.mycoffeeapp.model.Coffee
 import com.example.mycoffeeapp.ui.theme.IconColor
 import com.example.mycoffeeapp.ui.theme.MainText
 import com.example.mycoffeeapp.ui.theme.PrimaryColor
@@ -36,6 +50,14 @@ import com.example.mycoffeeapp.ui.theme.onPrimaryColor
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(navController: NavController){
+    val listOfCoffee : List<Coffee> = listOf<Coffee>(
+    Coffee("Americano", R.drawable.americano),
+    Coffee("Cappuccino", R.drawable.cappuccino),
+    Coffee("Latte", R.drawable.latte),
+    Coffee("Flat White", R.drawable.flat_white),
+    Coffee("Raf", R.drawable.raf),
+    Coffee("Espresso", R.drawable.espresso),
+    )
     Scaffold(
         topBar = {
             TopAppBar(
@@ -86,7 +108,7 @@ fun HomeScreen(navController: NavController){
     ) {
         Surface(
             modifier = Modifier
-                .padding(top = it.calculateTopPadding()+10.dp)
+                .padding(top = it.calculateTopPadding() + 10.dp)
                 .fillMaxSize(),
             color = PrimaryColor,
             shape = RoundedCornerShape(topStart = 25.dp, topEnd = 25.dp)
@@ -99,9 +121,43 @@ fun HomeScreen(navController: NavController){
                     text = "Select your coffee",
                     fontSize = 16.sp,
                     fontFamily = FontFamily(Font(R.font.poppins_regular)),
-                    color = onPrimaryColor
+                    color = onPrimaryColor,
                 )
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(2),
+                    contentPadding = PaddingValues(top = 18.dp, bottom = 25.dp) ,
+                ){
+                    items(listOfCoffee){
+                        CoffeeCardItem(it)
+                    }
+                }
             }
         }
     }
+}
+
+@Composable
+fun CoffeeCardItem(coffee: Coffee) {
+    Card(
+        shape = RoundedCornerShape(15.dp),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFFF7F8FB)),
+        modifier = Modifier.fillMaxWidth().height(200.dp).padding(8.dp)
+    ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center, modifier = Modifier.fillMaxSize().padding(20.dp)) {
+            Image(
+                painter = painterResource(id = coffee.image),
+                contentDescription = "coffee img",
+                modifier = Modifier.fillMaxSize(0.8f),
+                contentScale = ContentScale.Fit
+            )
+            Text(
+                text = coffee.name,
+                fontSize = 14.sp,
+                fontFamily = FontFamily.Serif,
+                modifier = Modifier.padding(top = 10.dp)
+            )
+            
+        }
+    }
+
 }
