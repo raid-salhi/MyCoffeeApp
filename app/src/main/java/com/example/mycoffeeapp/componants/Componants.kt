@@ -153,32 +153,4 @@ fun MyTextField(
             .background(color = if (selected) MainText else Color.LightGray))
     }
 }
-@Preview
-@Composable
-fun QuantityBox(){
-    var count by remember {
-        mutableStateOf(1)
-    }
-    Surface(
-        shape = RoundedCornerShape(50.dp),
-        border = BorderStroke(1.2.dp, color = borderColor),
-        color = Color.White,
-    ) {
-        Row (
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-                ){
-            IconButton(onClick = { count -= 1 }) {
-                Icon(painterResource(id = R.drawable.baseline_remove_24), contentDescription ="minus" )
-            }
-            Text(
-                text = count.toString(),
-                fontSize = 14.sp,
-                color = MainText
-            )
-            IconButton(onClick = { count += 1 }) {
-                Icon(painterResource(id = R.drawable.baseline_add_24), contentDescription ="plus" )
-            }
-        }
-    }
-}
+
