@@ -1,5 +1,6 @@
 package com.example.mycoffeeapp.componants
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -15,11 +16,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -36,12 +41,15 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.mycoffeeapp.R
 import com.example.mycoffeeapp.ui.theme.IconColor
 import com.example.mycoffeeapp.ui.theme.MainText
 import com.example.mycoffeeapp.ui.theme.PrimaryColor
+import com.example.mycoffeeapp.ui.theme.borderColor
+import com.example.mycoffeeapp.ui.theme.onPrimaryColor
 
 @Composable
 fun MyButton(action: () -> Unit,modifier: Modifier) {
@@ -144,6 +152,33 @@ fun MyTextField(
             .fillMaxWidth()
             .background(color = if (selected) MainText else Color.LightGray))
     }
-
-
+}
+@Preview
+@Composable
+fun QuantityBox(){
+    var count by remember {
+        mutableStateOf(1)
+    }
+    Surface(
+        shape = RoundedCornerShape(50.dp),
+        border = BorderStroke(1.2.dp, color = borderColor),
+        color = Color.White,
+    ) {
+        Row (
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+                ){
+            IconButton(onClick = { count -= 1 }) {
+                Icon(painterResource(id = R.drawable.baseline_remove_24), contentDescription ="minus" )
+            }
+            Text(
+                text = count.toString(),
+                fontSize = 14.sp,
+                color = MainText
+            )
+            IconButton(onClick = { count += 1 }) {
+                Icon(painterResource(id = R.drawable.baseline_add_24), contentDescription ="plus" )
+            }
+        }
+    }
 }
