@@ -1,6 +1,7 @@
 package com.example.mycoffeeapp.screens.homeScreen
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -9,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -19,9 +19,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SmallTopAppBar
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -42,6 +40,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.mycoffeeapp.R
 import com.example.mycoffeeapp.model.Coffee
+import com.example.mycoffeeapp.naviagtion.Routes
+import com.example.mycoffeeapp.screens.SharedViewModel
 import com.example.mycoffeeapp.ui.theme.IconColor
 import com.example.mycoffeeapp.ui.theme.MainText
 import com.example.mycoffeeapp.ui.theme.PrimaryColor
@@ -49,7 +49,7 @@ import com.example.mycoffeeapp.ui.theme.onPrimaryColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(navController: NavController){
+fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel){
     val listOfCoffee : List<Coffee> = listOf<Coffee>(
     Coffee("Americano", R.drawable.americano),
     Coffee("Cappuccino", R.drawable.cappuccino),
@@ -128,7 +128,7 @@ fun HomeScreen(navController: NavController){
                     contentPadding = PaddingValues(top = 18.dp, bottom = 25.dp) ,
                 ){
                     items(listOfCoffee){
-                        CoffeeCardItem(it)
+                        CoffeeCardItem(it,navController,sharedViewModel)
                     }
                 }
             }
@@ -137,11 +137,18 @@ fun HomeScreen(navController: NavController){
 }
 
 @Composable
-fun CoffeeCardItem(coffee: Coffee) {
+fun CoffeeCardItem(coffee: Coffee, navController: NavController, sharedViewModel: SharedViewModel) {
     Card(
         shape = RoundedCornerShape(15.dp),
         colors = CardDefaults.cardColors(containerColor = Color(0xFFF7F8FB)),
-        modifier = Modifier.fillMaxWidth().height(200.dp).padding(8.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(200.dp)
+            .padding(8.dp)
+            .clickable {
+                sharedViewModel.sendCoffee(coffee)
+                navController.navigate(Routes.OrderScreen.name)
+            }
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center, modifier = Modifier.fillMaxSize().padding(20.dp)) {
             Image(

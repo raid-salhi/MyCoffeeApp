@@ -6,5 +6,6 @@ enum class Routes {
     SignInScreen,
     SignUpScreen,
     OrderScreen,
+    MyOrderScreen,
     RewardsScreen
 }
