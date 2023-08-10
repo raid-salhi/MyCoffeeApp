@@ -1,5 +1,9 @@
 package com.example.mycoffeeapp.screens.orderScreen
 
+import android.os.Build
+import android.util.Log
+import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -35,6 +39,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -63,8 +68,15 @@ import com.example.mycoffeeapp.ui.theme.SecondaryColorFirst
 import com.example.mycoffeeapp.ui.theme.SecondaryColorSecond
 import com.example.mycoffeeapp.ui.theme.borderColor
 import com.example.mycoffeeapp.ui.theme.onPrimaryColor
+import com.vanpra.composematerialdialogs.MaterialDialog
+import com.vanpra.composematerialdialogs.datetime.time.TimePickerDefaults
+import com.vanpra.composematerialdialogs.datetime.time.timepicker
+import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import kotlinx.coroutines.delay
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OrderScreen(navController: NavController, sharedViewModel: SharedViewModel){
@@ -114,6 +126,14 @@ fun OrderScreen(navController: NavController, sharedViewModel: SharedViewModel){
         }
         var volume by remember {
             mutableStateOf(2)
+        }
+        var pickedTime by remember{
+            mutableStateOf(LocalTime.NOON)
+        }
+        val formattedTime = remember {
+            derivedStateOf {
+                DateTimeFormatter.ofPattern("HH:mm").format(pickedTime)
+            }
         }
         Box(modifier = Modifier
             .fillMaxSize()
@@ -241,8 +261,8 @@ fun OrderScreen(navController: NavController, sharedViewModel: SharedViewModel){
                                         contentDescription ="volume",
                                         tint = if (volume != 2)IconColorSecondary else IconColor,
                                                 modifier = Modifier
-                                            .width(25.dp)
-                                            .height(30.dp)
+                                                    .width(25.dp)
+                                                    .height(30.dp)
                                     )
                                 }
                                 Text(
@@ -292,11 +312,30 @@ fun OrderScreen(navController: NavController, sharedViewModel: SharedViewModel){
                         )
                     }
                     AnimatedVisibility(visible =switchCheck, modifier = Modifier.align(Alignment.End)) {
+                        val dialogState = rememberMaterialDialogState()
 
-                        Image(
-                            painter = painterResource(id = R.drawable.time_picker),
-                            contentDescription = "timepicker",
-                            modifier= Modifier.size(width = 86.dp, 36.dp))
+                        MaterialDialog(
+                            dialogState = dialogState,
+                            buttons = {
+                                positiveButton("Ok")
+                                negativeButton("Cancel")
+                            }
+                        ) {
+
+                            timepicker(
+                                initialTime = LocalTime.MIDNIGHT,
+                                title = "Pick a date",
+                                is24HourClock = true
+                            ) { time ->
+                                pickedTime = time
+                                Log.d("TAG", "OrderScreen: ${time.hour} ")
+                            }
+
+                        }
+                        TimePickedText(formattedTime.value){
+                            dialogState.show()
+                        }
+
                     }
                     Spacer(modifier = Modifier.height(15.dp))
                     AssemblageCard()
@@ -348,6 +387,22 @@ fun OrderScreen(navController: NavController, sharedViewModel: SharedViewModel){
         }
 
     }
+}
+
+@Composable
+fun TimePickedText(time: String?,onClick: () -> Unit) {
+    Text(
+        text = time!!,
+        modifier = Modifier
+            .clip(RoundedCornerShape(6.dp))
+            .clickable { onClick() }
+            .size(86.dp, 33.dp)
+            .background(borderColor),
+        fontSize = 22.sp,
+        fontFamily = FontFamily(Font(R.font.dmsans_medium)),
+        color = Black,
+        textAlign = TextAlign.Center
+    )
 }
 
 @Composable
