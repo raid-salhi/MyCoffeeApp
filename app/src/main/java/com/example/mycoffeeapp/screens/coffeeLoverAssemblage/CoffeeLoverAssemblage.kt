@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.mycoffeeapp.R
+import com.example.mycoffeeapp.naviagtion.Routes
 import com.example.mycoffeeapp.screens.SharedViewModel
 import com.example.mycoffeeapp.screens.orderScreen.CustomTopBar
 import com.example.mycoffeeapp.screens.orderScreen.QuantityBox
@@ -80,7 +81,7 @@ fun CoffeeLoverAssemblage(navController: NavHostController, sharedViewModel: Sha
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     TextForm(text="Select a barista")
-                    IconButton(onClick = { /*TODO*/ }) {
+                    IconButton(onClick = { navController.navigate(Routes.BaristaScreen.name) }) {
                         Icon(
                             imageVector = Icons.Default.KeyboardArrowRight ,
                             contentDescription ="next",

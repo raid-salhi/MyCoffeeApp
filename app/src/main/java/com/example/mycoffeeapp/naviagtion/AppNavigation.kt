@@ -9,6 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.mycoffeeapp.screens.SharedViewModel
+import com.example.mycoffeeapp.screens.coffeeLoverAssemblage.BaristaScreen
 import com.example.mycoffeeapp.screens.coffeeLoverAssemblage.CoffeeLoverAssemblage
 import com.example.mycoffeeapp.screens.homeScreen.HomeScreen
 import com.example.mycoffeeapp.screens.orderScreen.OrderScreen
@@ -43,8 +44,10 @@ fun AppNavigation(){
             OrderScreen(navController = navController,sharedViewModel)
         }
         composable(route = Routes.CoffeeLoverAssemblage.name) {
-
             CoffeeLoverAssemblage(navController = navController,sharedViewModel)
+        }
+        composable(route = Routes.BaristaScreen.name) {
+            BaristaScreen(navController = navController,sharedViewModel)
         }
     }
 

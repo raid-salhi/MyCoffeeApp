@@ -9,4 +9,5 @@ enum class Routes {
     MyOrderScreen,
     RewardsScreen,
     CoffeeLoverAssemblage,
+    BaristaScreen,
 }
