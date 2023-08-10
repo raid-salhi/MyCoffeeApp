@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -33,6 +34,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -42,6 +44,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
@@ -65,6 +68,7 @@ import kotlinx.coroutines.delay
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OrderScreen(navController: NavController, sharedViewModel: SharedViewModel){
+
     Scaffold(topBar = {
         CenterAlignedTopAppBar(
             title = {
@@ -88,7 +92,7 @@ fun OrderScreen(navController: NavController, sharedViewModel: SharedViewModel){
                 }
             },
             colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                containerColor = Color.White,
+                containerColor = White,
                 actionIconContentColor = IconColor,
                 titleContentColor = Color.Black,
                 navigationIconContentColor = Color.Black
@@ -99,9 +103,18 @@ fun OrderScreen(navController: NavController, sharedViewModel: SharedViewModel){
         var switchCheck by remember {
             mutableStateOf(false)
         }
-        LaunchedEffect(key1 = coffee, block = {
-            delay(200)
-        })
+        var count by remember {
+            mutableStateOf(1)
+        }
+        var ristrettoChoice by remember {
+            mutableStateOf(false)
+        }
+        var orderPlace by remember {
+            mutableStateOf(false)
+        }
+        var volume by remember {
+            mutableStateOf(2)
+        }
         Box(modifier = Modifier
             .fillMaxSize()
             .padding(it)){
@@ -139,7 +152,7 @@ fun OrderScreen(navController: NavController, sharedViewModel: SharedViewModel){
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         TextForm(text=coffee!!.name)
-                        QuantityBox()
+                        QuantityBox(count, onIncreaseCount = { count += 1 }, onDecreaseCount ={count =if (count<=1) 1 else count -1} )
                     }
                     SeparateLine()
                     Row(
@@ -151,9 +164,13 @@ fun OrderScreen(navController: NavController, sharedViewModel: SharedViewModel){
                     ) {
                         TextForm("Ristretto")
                         Row() {
-                            CustomBox(title="One")
+                            CustomBox(title="One", clicked = !ristrettoChoice){
+                                ristrettoChoice=false
+                            }
                             Spacer(modifier = Modifier.width(8.dp))
-                            CustomBox(title="Two")
+                            CustomBox(title="Two", clicked = ristrettoChoice){
+                                ristrettoChoice=true
+                            }
                         }
                     }
                     SeparateLine()
@@ -166,19 +183,19 @@ fun OrderScreen(navController: NavController, sharedViewModel: SharedViewModel){
                     ) {
                         TextForm(text="Onsite / Takeaway")
                         Row() {
-                            IconButton(onClick = { /*TODO*/ }) {
+                            IconButton(onClick = { orderPlace = false }) {
                                 Icon(
                                     painter = painterResource(id = R.drawable.onsite),
                                     contentDescription ="onsite",
-                                    tint = IconColorSecondary
+                                    tint = if (orderPlace) IconColorSecondary else IconColor
                                 )
                             }
                             Spacer(modifier = Modifier.width(20.dp))
-                            IconButton(onClick = { /*TODO*/ }) {
+                            IconButton(onClick = { orderPlace = true }) {
                                 Icon(
                                     painter = painterResource(id = R.drawable.takeaway),
                                     contentDescription ="takeaway",
-                                    tint = IconColor
+                                    tint = if (!orderPlace) IconColorSecondary else IconColor
                                 )
                             }
                         }
@@ -196,11 +213,11 @@ fun OrderScreen(navController: NavController, sharedViewModel: SharedViewModel){
                             Column(
                                 horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center
                             ) {
-                                IconButton(onClick = { /*TODO*/ }) {
+                                IconButton(onClick = { volume = 1 }) {
                                     Icon(
                                         painter = painterResource(id = R.drawable.volume),
                                         contentDescription ="volume",
-                                        tint = IconColorSecondary,
+                                        tint = if (volume != 1)IconColorSecondary else IconColor ,
                                         modifier = Modifier
                                             .width(20.dp)
                                             .height(25.dp)
@@ -210,7 +227,7 @@ fun OrderScreen(navController: NavController, sharedViewModel: SharedViewModel){
                                     text = "250",
                                     fontSize = 16.sp,
                                     fontFamily = FontFamily(Font(R.font.poppins_regular)),
-                                    color = IconColorSecondary
+                                    color = if (volume != 1)IconColorSecondary else IconColor
                                 )
                             }
 
@@ -218,12 +235,12 @@ fun OrderScreen(navController: NavController, sharedViewModel: SharedViewModel){
                             Column(
                                 horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center
                             ) {
-                                IconButton(onClick = { /*TODO*/ }) {
+                                IconButton(onClick = { volume=2 }) {
                                     Icon(
                                         painter = painterResource(id = R.drawable.volume),
                                         contentDescription ="volume",
-                                        tint = IconColor,
-                                        modifier = Modifier
+                                        tint = if (volume != 2)IconColorSecondary else IconColor,
+                                                modifier = Modifier
                                             .width(25.dp)
                                             .height(30.dp)
                                     )
@@ -232,18 +249,18 @@ fun OrderScreen(navController: NavController, sharedViewModel: SharedViewModel){
                                     text = "350",
                                     fontSize = 16.sp,
                                     fontFamily = FontFamily(Font(R.font.poppins_regular)),
-                                    color = IconColor
+                                    color = if (volume != 2)IconColorSecondary else IconColor
                                 )
                             }
                             Spacer(modifier = Modifier.width(20.dp))
                             Column(
                                 horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center
                             ) {
-                                IconButton(onClick = { /*TODO*/ }) {
+                                IconButton(onClick = {volume=3 }) {
                                     Icon(
                                         painter = painterResource(id = R.drawable.volume),
                                         contentDescription ="volume",
-                                        tint = IconColorSecondary,
+                                        tint = if (volume != 3)IconColorSecondary else IconColor ,
                                         modifier = Modifier
                                             .width(30.dp)
                                             .height(35.dp)
@@ -253,7 +270,7 @@ fun OrderScreen(navController: NavController, sharedViewModel: SharedViewModel){
                                     text = "450",
                                     fontSize = 16.sp,
                                     fontFamily = FontFamily(Font(R.font.poppins_regular)),
-                                    color = IconColorSecondary
+                                    color = if (volume != 3)IconColorSecondary else IconColor
                                 )
                             }
                         }
@@ -275,6 +292,7 @@ fun OrderScreen(navController: NavController, sharedViewModel: SharedViewModel){
                         )
                     }
                     AnimatedVisibility(visible =switchCheck, modifier = Modifier.align(Alignment.End)) {
+
                         Image(
                             painter = painterResource(id = R.drawable.time_picker),
                             contentDescription = "timepicker",
@@ -316,7 +334,9 @@ fun OrderScreen(navController: NavController, sharedViewModel: SharedViewModel){
                         .padding(top = 10.dp, bottom = 10.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = PrimaryColor)) {
                     Text(
-                        modifier = Modifier.fillMaxWidth().padding(10.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(10.dp),
                         text = "Next",
                         color = White,
                         fontSize = 18.sp,
@@ -378,14 +398,17 @@ fun SeparateLine() {
 }
 
 @Composable
-fun CustomBox(title: String) {
+fun CustomBox(title: String,clicked:Boolean,onClick:()->Unit) {
     Surface(
         shape = RoundedCornerShape(50.dp),
-        border = BorderStroke(1.2.dp, color = borderColor),
-        color = Color.White,
+        border = BorderStroke(1.2.dp, color = if (!clicked) borderColor else Black),
+        color = White,
         modifier = Modifier
             .width(80.dp)
             .height(40.dp)
+            .clickable {
+                onClick()
+            }
     ){
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -412,20 +435,18 @@ fun TextForm(text: String) {
     )
 }
 @Composable
-fun QuantityBox(){
-    var count by remember {
-        mutableStateOf(1)
-    }
+fun QuantityBox(count:Int,onIncreaseCount: () -> Unit,onDecreaseCount:()->Unit){
+
     Surface(
         shape = RoundedCornerShape(50.dp),
         border = BorderStroke(1.2.dp, color = borderColor),
-        color = Color.White,
+        color = White,
     ) {
         Row (
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
         ){
-            IconButton(onClick = { count =if (count<=1) 1 else count-1 }) {
+            IconButton(onClick = { onDecreaseCount() }) {
                 Icon(painterResource(id = R.drawable.baseline_remove_24), contentDescription ="minus", tint = IconColor)
             }
             Text(
@@ -433,7 +454,7 @@ fun QuantityBox(){
                 fontSize = 16.sp,
                 color = MainText
             )
-            IconButton(onClick = { count += 1 }) {
+            IconButton(onClick = {onIncreaseCount () }) {
                 Icon(painterResource(id = R.drawable.baseline_add_24), contentDescription ="plus", tint = IconColor )
             }
         }
