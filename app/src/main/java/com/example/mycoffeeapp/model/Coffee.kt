@@ -7,7 +7,8 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class Coffee(
     val name:String,
-    val image : Int
+    val image : Int,
+    val price : Double
 ):Parcelable
 
 

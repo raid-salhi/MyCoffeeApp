@@ -125,7 +125,7 @@ fun OrderScreen(navController: NavController, sharedViewModel: SharedViewModel){
             mutableStateOf(false)
         }
         var volume by remember {
-            mutableStateOf(2)
+            mutableStateOf(1)
         }
         var pickedTime by remember{
             mutableStateOf(LocalTime.NOON)
@@ -134,6 +134,9 @@ fun OrderScreen(navController: NavController, sharedViewModel: SharedViewModel){
             derivedStateOf {
                 DateTimeFormatter.ofPattern("HH:mm").format(pickedTime)
             }
+        }
+        var price by remember {
+            mutableStateOf(coffee!!.price)
         }
         Box(modifier = Modifier
             .fillMaxSize()
@@ -359,8 +362,11 @@ fun OrderScreen(navController: NavController, sharedViewModel: SharedViewModel){
                         fontSize = 18.sp,
                         fontFamily = FontFamily(Font(R.font.poppins_regular))
                     )
+                    val ristrettoPrice=if (!ristrettoChoice) 0.00 else 0.50
+                    val priceVolume=if (volume==2) 1.00 else if (volume==3) 1.50 else 0.00
+                    price = (coffee!!.price+ristrettoPrice+priceVolume)*count
                     Text(
-                        text = "BYN 3.00",
+                        text = "$ $price",
                         color = MainText,
                         fontSize = 18.sp,
                         fontFamily = FontFamily(Font(R.font.poppins_regular))

@@ -51,12 +51,12 @@ import com.example.mycoffeeapp.ui.theme.onPrimaryColor
 @Composable
 fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel){
     val listOfCoffee : List<Coffee> = listOf<Coffee>(
-    Coffee("Americano", R.drawable.americano),
-    Coffee("Cappuccino", R.drawable.cappuccino),
-    Coffee("Latte", R.drawable.latte),
-    Coffee("Flat White", R.drawable.flat_white),
-    Coffee("Raf", R.drawable.raf),
-    Coffee("Espresso", R.drawable.espresso),
+    Coffee("Americano", R.drawable.americano,5.00),
+    Coffee("Cappuccino", R.drawable.cappuccino,3.00),
+    Coffee("Latte", R.drawable.latte,3.30),
+    Coffee("Flat White", R.drawable.flat_white,3.00),
+    Coffee("Raf", R.drawable.raf,4.00),
+    Coffee("Espresso", R.drawable.espresso,3.50),
     )
     Scaffold(
         topBar = {
