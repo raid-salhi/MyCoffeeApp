@@ -2,7 +2,6 @@ package com.example.mycoffeeapp.screens.orderScreen
 
 import android.os.Build
 import android.util.Log
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
@@ -14,7 +13,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -37,8 +35,6 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -59,6 +55,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.mycoffeeapp.R
+import com.example.mycoffeeapp.naviagtion.Routes
 import com.example.mycoffeeapp.screens.SharedViewModel
 import com.example.mycoffeeapp.ui.theme.IconColor
 import com.example.mycoffeeapp.ui.theme.IconColorSecondary
@@ -67,12 +64,9 @@ import com.example.mycoffeeapp.ui.theme.PrimaryColor
 import com.example.mycoffeeapp.ui.theme.SecondaryColorFirst
 import com.example.mycoffeeapp.ui.theme.SecondaryColorSecond
 import com.example.mycoffeeapp.ui.theme.borderColor
-import com.example.mycoffeeapp.ui.theme.onPrimaryColor
 import com.vanpra.composematerialdialogs.MaterialDialog
-import com.vanpra.composematerialdialogs.datetime.time.TimePickerDefaults
 import com.vanpra.composematerialdialogs.datetime.time.timepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
-import kotlinx.coroutines.delay
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
@@ -82,35 +76,9 @@ import java.time.format.DateTimeFormatter
 fun OrderScreen(navController: NavController, sharedViewModel: SharedViewModel){
 
     Scaffold(topBar = {
-        CenterAlignedTopAppBar(
-            title = {
-                Text(text = "Order")
-            },
-            navigationIcon = {
-                IconButton(onClick = { /*TODO*/ }) {
-                    Icon(
-                        imageVector = Icons.Default.ArrowBack,
-                        contentDescription = "back"
-                    )
-                }
-            },
-            actions = {
-                IconButton(onClick = { /*TODO*/ }) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.buy),
-                        contentDescription = "buy",
-                        modifier = Modifier.size(26.dp)
-                    )
-                }
-            },
-            colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                containerColor = White,
-                actionIconContentColor = IconColor,
-                titleContentColor = Color.Black,
-                navigationIconContentColor = Color.Black
-            )
-        )
-    }) {
+        CustomTopBar("Order")
+    })
+    {
         val coffee = sharedViewModel.coffee
         var switchCheck by remember {
             mutableStateOf(false)
@@ -341,7 +309,9 @@ fun OrderScreen(navController: NavController, sharedViewModel: SharedViewModel){
 
                     }
                     Spacer(modifier = Modifier.height(15.dp))
-                    AssemblageCard()
+                    AssemblageCard(){
+                        navController.navigate(Routes.CoffeeLoverAssemblage.name)
+                    }
 
                 }
             }
@@ -395,6 +365,39 @@ fun OrderScreen(navController: NavController, sharedViewModel: SharedViewModel){
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CustomTopBar(title: String,navigationClick :()->Unit={},actionClick :()->Unit={}) {
+    CenterAlignedTopAppBar(
+        title = {
+            Text(text = title)
+        },
+        navigationIcon = {
+            IconButton(onClick = { navigationClick()}) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = "back"
+                )
+            }
+        },
+        actions = {
+            IconButton(onClick = { actionClick() }) {
+                Icon(
+                    painter = painterResource(id = R.drawable.buy),
+                    contentDescription = "buy",
+                    modifier = Modifier.size(26.dp)
+                )
+            }
+        },
+        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+            containerColor = White,
+            actionIconContentColor = IconColor,
+            titleContentColor = Color.Black,
+            navigationIconContentColor = Color.Black
+        )
+    )
+}
+
 @Composable
 fun TimePickedText(time: String?,onClick: () -> Unit) {
     Text(
@@ -412,13 +415,14 @@ fun TimePickedText(time: String?,onClick: () -> Unit) {
 }
 
 @Composable
-fun AssemblageCard() {
+fun AssemblageCard(onClick: () -> Unit) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(20.dp))
+            .clickable { onClick() }
             .background(
                 Brush.linearGradient(
                     listOf(
