@@ -78,10 +78,20 @@ fun CoffeeLoverAssemblage(navController: NavHostController, sharedViewModel: Sha
         var sliderValue by remember {
             mutableStateOf(0f)
         }
+
         var openSheet by remember {
             mutableStateOf(false)
         }
-        var bottomSheetIem = remember {
+        var grindingChoice by remember {
+            mutableStateOf(false)
+        }
+        var roastingChoise by remember {
+            mutableStateOf(1)
+        }
+        var iceChoice by remember {
+            mutableStateOf(1)
+        }
+        val bottomSheetIem = remember {
             mutableStateOf(BottomSheetItem(list= emptyList(),question=""))
         }
         if (openSheet){
@@ -196,42 +206,53 @@ fun CoffeeLoverAssemblage(navController: NavHostController, sharedViewModel: Sha
                 ) {
                     TextForm(text="Roasting")
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        IconButton(onClick = { /*TODO*/ }, modifier = Modifier.padding(start = 10.dp)) {
+                        IconButton(onClick = { roastingChoise =1 }, modifier = Modifier.padding(start = 10.dp)) {
                             Icon(
                                 painter = painterResource(id = R.drawable.roasting) ,
                                 contentDescription ="roasting",
-                                tint = IconColor
+                                tint = if(roastingChoise==1)IconColor else IconColorSecondary
                             )
                         }
 
-                        Row(Modifier.padding(start = 10.dp)) {
+                        Row(
+                            Modifier
+                                .padding(start = 10.dp)
+                                .clickable { roastingChoise = 2 },
+                        ) {
+                            val roastColor = if (roastingChoise==2)IconColor else IconColorSecondary
                             Icon(
                                 painter = painterResource(id = R.drawable.roasting) ,
                                 contentDescription ="roasting",
-                                tint = IconColorSecondary
+                                tint = roastColor
                             )
                             Icon(
                                 painter = painterResource(id = R.drawable.roasting) ,
                                 contentDescription ="roasting",
-                                tint = IconColorSecondary
+                                tint = roastColor
                             )
                         }
-                        Column(modifier = Modifier.padding(start = 10.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                        Column(
+                            modifier = Modifier
+                                .padding(start = 10.dp)
+                                .clickable { roastingChoise = 3 },
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            val roastColor = if (roastingChoise==3)IconColor else IconColorSecondary
                             Icon(
                                 painter = painterResource(id = R.drawable.roasting) ,
                                 contentDescription ="roasting",
-                                tint = IconColorSecondary
+                                tint = roastColor
                             )
                             Row() {
                                 Icon(
                                     painter = painterResource(id = R.drawable.roasting) ,
                                     contentDescription ="roasting",
-                                    tint = IconColorSecondary
+                                    tint = roastColor
                                 )
                                 Icon(
                                     painter = painterResource(id = R.drawable.roasting) ,
                                     contentDescription ="roasting",
-                                    tint = IconColorSecondary
+                                    tint = roastColor
                                 )
                             }
                         }
@@ -247,21 +268,23 @@ fun CoffeeLoverAssemblage(navController: NavHostController, sharedViewModel: Sha
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     TextForm(text="Grinding")
-                    IconButton(onClick = { /*TODO*/ }) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.grinding) ,
-                            contentDescription ="next",
-                            tint = IconColor,
-                            modifier = Modifier.size(21.dp,25.dp)
-                        )
-                    }
-                    IconButton(onClick = { /*TODO*/ }) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.grinding) ,
-                            contentDescription ="next",
-                            tint = IconColorSecondary,
-                            modifier = Modifier.size(27.dp,32.dp)
-                        )
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        IconButton(onClick = { grindingChoice = false}) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.grinding) ,
+                                contentDescription ="next",
+                                tint = if (!grindingChoice)IconColor else IconColorSecondary,
+                                modifier = Modifier.size(21.dp,25.dp)
+                            )
+                        }
+                        IconButton(onClick = { grindingChoice = true }) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.grinding) ,
+                                contentDescription ="next",
+                                tint = if (grindingChoice)IconColor else IconColorSecondary,
+                                modifier = Modifier.size(27.dp,32.dp)
+                            )
+                        }
                     }
                 }
                 SeparateLine()
@@ -309,23 +332,7 @@ fun CoffeeLoverAssemblage(navController: NavHostController, sharedViewModel: Sha
                     }
                 }
                 SeparateLine()
-                Row(
-                    Modifier
-                        .padding(10.dp)
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    TextForm(text="Additives")
-                    IconButton(onClick = { /*TODO*/ }) {
-                        Icon(
-                            imageVector = Icons.Default.KeyboardArrowRight ,
-                            contentDescription ="next",
-                            tint = IconColor
-                        )
-                    }
-                }
-                SeparateLine()
+
                 Row(
                     Modifier
                         .padding(10.dp)
@@ -335,42 +342,50 @@ fun CoffeeLoverAssemblage(navController: NavHostController, sharedViewModel: Sha
                 ) {
                     TextForm(text="Roasting")
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        IconButton(onClick = { /*TODO*/ }, modifier = Modifier.padding(start = 10.dp)) {
+                        IconButton(onClick = { iceChoice=1 }, modifier = Modifier.padding(start = 10.dp)) {
                             Icon(
                                 painter = painterResource(id = R.drawable.ice) ,
                                 contentDescription ="roasting",
-                                tint = IconColor
+                                tint = if (iceChoice==1)IconColor else IconColorSecondary
                             )
                         }
 
-                        Row(Modifier.padding(start = 10.dp)) {
+                        Row(
+                            Modifier
+                                .padding(start = 10.dp)
+                                .clickable { iceChoice = 2 }) {
+                            val iceColor = if (iceChoice==2) IconColor else IconColorSecondary
                             Icon(
                                 painter = painterResource(id = R.drawable.ice) ,
                                 contentDescription ="roasting",
-                                tint = IconColorSecondary
+                                tint = iceColor
                             )
                             Icon(
                                 painter = painterResource(id = R.drawable.ice) ,
                                 contentDescription ="roasting",
-                                tint = IconColorSecondary
+                                tint = iceColor
                             )
                         }
-                        Column(modifier = Modifier.padding(start = 10.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                        Column(modifier = Modifier
+                            .padding(start = 10.dp)
+                            .clickable { iceChoice = 3 },
+                            horizontalAlignment = Alignment.CenterHorizontally) {
+                            val iceColor = if (iceChoice==3) IconColor else IconColorSecondary
                             Icon(
                                 painter = painterResource(id = R.drawable.ice) ,
                                 contentDescription ="roasting",
-                                tint = IconColorSecondary
+                                tint = iceColor
                             )
                             Row() {
                                 Icon(
                                     painter = painterResource(id = R.drawable.ice) ,
                                     contentDescription ="roasting",
-                                    tint = IconColorSecondary
+                                    tint = iceColor
                                 )
                                 Icon(
                                     painter = painterResource(id = R.drawable.ice) ,
                                     contentDescription ="roasting",
-                                    tint = IconColorSecondary
+                                    tint = iceColor
                                 )
                             }
                         }
@@ -496,7 +511,7 @@ fun MyBottomSheet(list: List<String>,question:String,onDismiss:()->Unit) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 30.dp),
-                onClick = { coroutineScope.launch { bottomSheetState.hide() } },
+                onClick = { onDismiss()  },
                 shape = RoundedCornerShape(13.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color.White
