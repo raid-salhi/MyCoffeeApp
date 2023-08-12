@@ -1,6 +1,6 @@
 package com.example.mycoffeeapp.screens.coffeeLoverAssemblage
 
-import android.widget.Space
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -27,17 +26,14 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SheetState
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -53,6 +49,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.mycoffeeapp.R
 import com.example.mycoffeeapp.model.Assemblage
+import com.example.mycoffeeapp.model.Barista
 import com.example.mycoffeeapp.model.BottomSheetItem
 import com.example.mycoffeeapp.model.Order
 import com.example.mycoffeeapp.naviagtion.Routes
@@ -69,11 +66,14 @@ import com.example.mycoffeeapp.ui.theme.SubText
 import com.example.mycoffeeapp.ui.theme.borderColor
 import com.example.mycoffeeapp.ui.theme.onPrimaryColor
 import com.example.mycoffeeapp.utils.Constants
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CoffeeLoverAssemblage(navController: NavHostController, sharedViewModel: SharedViewModel) {
+fun CoffeeLoverAssemblage(
+    navController: NavHostController,
+    sharedViewModel: SharedViewModel,
+    barista: Barista?
+) {
     Scaffold(topBar = {
         CustomTopBar("Coffee lover assemblage")
     }){
@@ -468,28 +468,19 @@ fun CoffeeLoverAssemblage(navController: NavHostController, sharedViewModel: Sha
                 }
             }
             BackHandler {
-                sharedViewModel.sendOrder(
-                    Order(
-                        coffee=order.coffee,
-                        quantity = order.quantity,
-                        ristretto = order.ristretto,
-                        place = order.place,
-                        volume = order.volume,
-                        time = order.time,
-                        totalPrice = order.totalPrice,
-                        assemblage = Assemblage(
-                            barista = null,
-                            coffeeType = sliderValue.toInt(),
-                            coffeeSort=coffeeSort,
-                            roastingDegree = roastingChoise,
-                            grindingDegree=if (!grindingChoice) 1 else 2,
-                            milk=milk,
-                            syrup = syrup,
-                            iceCubes = iceChoice
-                        )
-                    )
-                )
-                navController.navigate(Routes.OrderScreen.name)
+                navController.previousBackStackEntry?.savedStateHandle
+                    ?.set("assemblage",Assemblage(
+                        barista = barista,
+                        coffeeType = sliderValue.toInt(),
+                        coffeeSort=coffeeSort,
+                        roastingDegree = roastingChoise,
+                        grindingDegree=if (!grindingChoice) 1 else 2,
+                        milk=milk,
+                        syrup = syrup,
+                        iceCubes = iceChoice
+                    ))
+
+                navController.popBackStack()
             }
         }
     }

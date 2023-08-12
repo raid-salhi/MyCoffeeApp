@@ -55,6 +55,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.mycoffeeapp.R
+import com.example.mycoffeeapp.model.Assemblage
 import com.example.mycoffeeapp.model.Order
 import com.example.mycoffeeapp.naviagtion.Routes
 import com.example.mycoffeeapp.screens.SharedViewModel
@@ -74,7 +75,11 @@ import java.time.format.DateTimeFormatter
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun OrderScreen(navController: NavController, sharedViewModel: SharedViewModel){
+fun OrderScreen(
+    navController: NavController,
+    sharedViewModel: SharedViewModel,
+    assemblage: Assemblage?
+){
 
     Scaffold(topBar = {
         CustomTopBar("Order")
@@ -82,7 +87,6 @@ fun OrderScreen(navController: NavController, sharedViewModel: SharedViewModel){
     {
         val coffee = sharedViewModel.coffee
         val order =sharedViewModel.order!!
-        val assemblage = order.assemblage
 
         var switchCheck by remember {
             mutableStateOf(!order.time.isNullOrBlank())
@@ -326,7 +330,7 @@ fun OrderScreen(navController: NavController, sharedViewModel: SharedViewModel){
                                 volume = if (volume==1) 250 else if (volume==2) 350 else 450,
                                 time = if (switchCheck) formattedTime.value else null,
                                 totalPrice = price,
-                                assemblage = assemblage
+                                assemblage = assemblage?:Assemblage()
                             )
                         )
                         navController.navigate(Routes.CoffeeLoverAssemblage.name)

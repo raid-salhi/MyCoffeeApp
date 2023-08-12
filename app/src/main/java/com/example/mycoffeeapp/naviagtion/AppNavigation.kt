@@ -8,6 +8,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.mycoffeeapp.model.Assemblage
+import com.example.mycoffeeapp.model.Barista
 import com.example.mycoffeeapp.screens.SharedViewModel
 import com.example.mycoffeeapp.screens.coffeeLoverAssemblage.BaristaScreen
 import com.example.mycoffeeapp.screens.coffeeLoverAssemblage.CoffeeLoverAssemblage
@@ -40,11 +42,12 @@ fun AppNavigation(){
             SignUp(navController = navController)
         }
         composable(route = Routes.OrderScreen.name) {
-
-            OrderScreen(navController = navController,sharedViewModel)
+            val assemblage = it.savedStateHandle.get<Assemblage>("assemblage")
+            OrderScreen(navController = navController,sharedViewModel,assemblage)
         }
         composable(route = Routes.CoffeeLoverAssemblage.name) {
-            CoffeeLoverAssemblage(navController = navController,sharedViewModel)
+            val barista = it.savedStateHandle.get<Barista>("Barista")
+            CoffeeLoverAssemblage(navController = navController,sharedViewModel,barista)
         }
         composable(route = Routes.BaristaScreen.name) {
             BaristaScreen(navController = navController,sharedViewModel)

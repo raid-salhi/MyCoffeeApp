@@ -74,7 +74,12 @@ fun BaristaScreen(navController: NavController,sharedViewModel: SharedViewModel)
             LazyColumn(modifier = Modifier.padding(top = 15.dp)){
                 items(baristas){barista ->
                     BaristaRow(barista){
-
+                        navController.previousBackStackEntry?.savedStateHandle
+                            ?.set(
+                                "Barista",
+                                barista
+                            )
+                        navController.popBackStack()
                     }
                 }
             }
