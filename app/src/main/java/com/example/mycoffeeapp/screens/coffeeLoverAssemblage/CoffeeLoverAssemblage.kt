@@ -1,6 +1,7 @@
 package com.example.mycoffeeapp.screens.coffeeLoverAssemblage
 
 import android.widget.Space
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -51,7 +52,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.mycoffeeapp.R
+import com.example.mycoffeeapp.model.Assemblage
 import com.example.mycoffeeapp.model.BottomSheetItem
+import com.example.mycoffeeapp.model.Order
 import com.example.mycoffeeapp.naviagtion.Routes
 import com.example.mycoffeeapp.screens.SharedViewModel
 import com.example.mycoffeeapp.screens.orderScreen.CustomTopBar
@@ -74,28 +77,45 @@ fun CoffeeLoverAssemblage(navController: NavHostController, sharedViewModel: Sha
     Scaffold(topBar = {
         CustomTopBar("Coffee lover assemblage")
     }){
-        val coffee = sharedViewModel.coffee!!
+        val order=sharedViewModel.order!!
+        val assemblage = order.assemblage
         var sliderValue by remember {
-            mutableStateOf(0f)
+            mutableStateOf(assemblage.coffeeType.toFloat())
         }
 
         var openSheet by remember {
             mutableStateOf(false)
         }
         var grindingChoice by remember {
-            mutableStateOf(false)
+            mutableStateOf(assemblage.grindingDegree!=1)
         }
         var roastingChoise by remember {
-            mutableStateOf(1)
+            mutableStateOf(assemblage.roastingDegree)
         }
         var iceChoice by remember {
-            mutableStateOf(1)
+            mutableStateOf(assemblage.roastingDegree)
+        }
+        var coffeeSort by remember {
+            mutableStateOf(assemblage.coffeeSort)
+        }
+        var milk by remember {
+            mutableStateOf(assemblage.milk)
+        }
+        var syrup by remember {
+            mutableStateOf(assemblage.syrup)
         }
         val bottomSheetIem = remember {
-            mutableStateOf(BottomSheetItem(list= emptyList(),question=""))
+            mutableStateOf(BottomSheetItem(list= emptyList(),question="", customChoice = "", onRowClicked = {}))
         }
         if (openSheet){
-            MyBottomSheet(list = bottomSheetIem.value.list , bottomSheetIem.value.question) {
+            MyBottomSheet(
+                list = bottomSheetIem.value.list ,
+                bottomSheetIem.value.question ,
+                customChoice = bottomSheetIem.value.customChoice,
+                onRowClicked = {text ->
+                    bottomSheetIem.value.onRowClicked(text)
+                }
+            ) {
                 openSheet=false
             }
         }
@@ -187,7 +207,10 @@ fun CoffeeLoverAssemblage(navController: NavHostController, sharedViewModel: Sha
                     TextForm(text="Coffee sort")
                     Button(
                         onClick = {
-                            bottomSheetIem.value= BottomSheetItem(list = Constants.COFFEE_SORT_LIST, question = "What sort of coffee do you prefer?")
+                            bottomSheetIem.value= BottomSheetItem(list = Constants.COFFEE_SORT_LIST, question = "What sort of coffee do you prefer?", customChoice = coffeeSort){ text ->
+                                coffeeSort=text
+                                openSheet=false
+                            }
                             openSheet=true
                                   },
                         colors = ButtonDefaults.buttonColors(
@@ -300,7 +323,10 @@ fun CoffeeLoverAssemblage(navController: NavHostController, sharedViewModel: Sha
                     TextForm(text="Milk")
                     Button(
                         onClick = {
-                            bottomSheetIem.value= BottomSheetItem(list = Constants.MILK_LIST, question = "What milk do you prefer?")
+                            bottomSheetIem.value= BottomSheetItem(list = Constants.MILK_LIST, question = "What milk do you prefer?", customChoice = milk){ text ->
+                                milk=text
+                                openSheet=false
+                            }
                             openSheet=true
                         },
                         colors = ButtonDefaults.buttonColors(
@@ -322,7 +348,10 @@ fun CoffeeLoverAssemblage(navController: NavHostController, sharedViewModel: Sha
                     TextForm(text="Syrup")
                     Button(
                         onClick = {
-                            bottomSheetIem.value= BottomSheetItem(list = Constants.SYRUP_LIST, question = "What syrup do you prefer?")
+                            bottomSheetIem.value= BottomSheetItem(list = Constants.SYRUP_LIST, question = "What syrup do you prefer?", customChoice = syrup){ text ->
+                                syrup=text
+                                openSheet=false
+                            }
                             openSheet=true
                                   },
                         colors = ButtonDefaults.buttonColors(
@@ -414,7 +443,7 @@ fun CoffeeLoverAssemblage(navController: NavHostController, sharedViewModel: Sha
                     )
 
                     Text(
-                        text = coffee.price.toString(),
+                        text = order.totalPrice.toString(),
                         color = MainText,
                         fontSize = 18.sp,
                         fontFamily = FontFamily(Font(R.font.poppins_regular))
@@ -438,12 +467,36 @@ fun CoffeeLoverAssemblage(navController: NavHostController, sharedViewModel: Sha
                     )
                 }
             }
+            BackHandler {
+                sharedViewModel.sendOrder(
+                    Order(
+                        coffee=order.coffee,
+                        quantity = order.quantity,
+                        ristretto = order.ristretto,
+                        place = order.place,
+                        volume = order.volume,
+                        time = order.time,
+                        totalPrice = order.totalPrice,
+                        assemblage = Assemblage(
+                            barista = null,
+                            coffeeType = sliderValue.toInt(),
+                            coffeeSort=coffeeSort,
+                            roastingDegree = roastingChoise,
+                            grindingDegree=if (!grindingChoice) 1 else 2,
+                            milk=milk,
+                            syrup = syrup,
+                            iceCubes = iceChoice
+                        )
+                    )
+                )
+                navController.navigate(Routes.OrderScreen.name)
+            }
         }
     }
 }
 
 @Composable
-fun SheetRow(text: String,isClicked:Boolean,onClick:(String)->Unit) {
+fun SheetRow(text: String,customChoice: String,onClick:(String)->Unit) {
     Row(
         Modifier
             .fillMaxWidth()
@@ -459,16 +512,15 @@ fun SheetRow(text: String,isClicked:Boolean,onClick:(String)->Unit) {
             modifier = Modifier.padding(top = 2.dp, bottom = 2.dp),
             fontSize = 20.sp,
             fontFamily = FontFamily(Font(R.font.poppins_regular)),
-            color = if (isClicked) ActiveBlue else MainText
+            color = if (customChoice==text) ActiveBlue else MainText
         )
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MyBottomSheet(list: List<String>,question:String,onDismiss:()->Unit) {
+fun MyBottomSheet(list: List<String>,question:String,customChoice:String,onRowClicked: (String)->Unit,onDismiss:()->Unit) {
     val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false)
-    val coroutineScope = rememberCoroutineScope()
     var clicked by remember {
         mutableStateOf(false)
     }
@@ -502,8 +554,10 @@ fun MyBottomSheet(list: List<String>,question:String,onDismiss:()->Unit) {
                 LazyColumn(Modifier.fillMaxWidth()){
                     items(list){
                         SeparateLine()
-                        SheetRow(it, isClicked = clicked){text ->
+                        SheetRow(it, customChoice = customChoice){text ->
                             clicked = !clicked
+                            onRowClicked(text)
+
                         }
                     }
                 }

@@ -2,7 +2,7 @@ package com.example.mycoffeeapp.model
 
 data class Order(
     val coffee: Coffee,
-    val assemblage: Assemblage?=null,
+    val assemblage: Assemblage=Assemblage(),
     val quantity : Int = 1,
     val ristretto : Int = 1,
     val place : String = "Onsite",

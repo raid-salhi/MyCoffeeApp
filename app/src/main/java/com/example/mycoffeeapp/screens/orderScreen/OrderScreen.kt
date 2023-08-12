@@ -55,6 +55,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.mycoffeeapp.R
+import com.example.mycoffeeapp.model.Order
 import com.example.mycoffeeapp.naviagtion.Routes
 import com.example.mycoffeeapp.screens.SharedViewModel
 import com.example.mycoffeeapp.ui.theme.IconColor
@@ -80,23 +81,25 @@ fun OrderScreen(navController: NavController, sharedViewModel: SharedViewModel){
     })
     {
         val coffee = sharedViewModel.coffee
+        val order =sharedViewModel.order!!
+
         var switchCheck by remember {
-            mutableStateOf(false)
+            mutableStateOf(!order.time.isNullOrBlank())
         }
         var count by remember {
-            mutableStateOf(1)
+            mutableStateOf(order.quantity)
         }
         var ristrettoChoice by remember {
-            mutableStateOf(false)
+            mutableStateOf(order.ristretto != 1)
         }
         var orderPlace by remember {
-            mutableStateOf(false)
+            mutableStateOf(order.place != "Onsite")
         }
         var volume by remember {
-            mutableStateOf(1)
+            mutableStateOf(if (order.volume==250) 1 else if (order.volume==350) 2 else 3)
         }
         var pickedTime by remember{
-            mutableStateOf(LocalTime.NOON)
+            mutableStateOf(if (order.time.isNullOrBlank()) LocalTime.NOON else dateFormatter(order.time))
         }
         val formattedTime = remember {
             derivedStateOf {
@@ -104,8 +107,11 @@ fun OrderScreen(navController: NavController, sharedViewModel: SharedViewModel){
             }
         }
         var price by remember {
-            mutableStateOf(coffee!!.price)
+            mutableStateOf(order!!.totalPrice)
         }
+        val ristrettoPrice=if (!ristrettoChoice) 0.00 else 0.50
+
+        val priceVolume=if (volume==2) 1.00 else if (volume==3) 1.50 else 0.00
         Box(modifier = Modifier
             .fillMaxSize()
             .padding(it)){
@@ -310,6 +316,17 @@ fun OrderScreen(navController: NavController, sharedViewModel: SharedViewModel){
                     }
                     Spacer(modifier = Modifier.height(15.dp))
                     AssemblageCard(){
+                        sharedViewModel.sendOrder(
+                            Order(
+                                coffee = coffee!!,
+                                quantity = count,
+                                ristretto = if (!ristrettoChoice) 1 else 2,
+                                place = if (!orderPlace) "Onsite" else "Takeaway",
+                                volume = if (volume==1) 250 else if (volume==2) 350 else 450,
+                                time = if (switchCheck) formattedTime.value else null,
+                                totalPrice = price
+                            )
+                        )
                         navController.navigate(Routes.CoffeeLoverAssemblage.name)
                     }
 
@@ -332,8 +349,7 @@ fun OrderScreen(navController: NavController, sharedViewModel: SharedViewModel){
                         fontSize = 18.sp,
                         fontFamily = FontFamily(Font(R.font.poppins_regular))
                     )
-                    val ristrettoPrice=if (!ristrettoChoice) 0.00 else 0.50
-                    val priceVolume=if (volume==2) 1.00 else if (volume==3) 1.50 else 0.00
+
                     price = (coffee!!.price+ristrettoPrice+priceVolume)*count
                     Text(
                         text = "$ $price",
@@ -363,6 +379,12 @@ fun OrderScreen(navController: NavController, sharedViewModel: SharedViewModel){
         }
 
     }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun dateFormatter(time: String): LocalTime? {
+    val formatter = DateTimeFormatter.ofPattern("HH:mm")
+    return LocalTime.parse(time,formatter)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
