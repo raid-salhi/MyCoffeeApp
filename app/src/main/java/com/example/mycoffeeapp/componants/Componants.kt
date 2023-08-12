@@ -112,15 +112,15 @@ fun MyTextField(
                 onValueChange ={
                     text=it
                 },
-                colors = TextFieldDefaults.textFieldColors(
-                    containerColor = Color.White,
-                    placeholderColor = Color.LightGray,
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.White,
+                    focusedPlaceholderColor = Color.LightGray,
                     unfocusedIndicatorColor = Color.White,
                     focusedIndicatorColor = Color.White,
                     cursorColor = MainText,
                     unfocusedTrailingIconColor = IconColor,
                     focusedTrailingIconColor = IconColor,
-                    textColor = Color.Black
+                    focusedTextColor = Color.Black
                 ),
                 singleLine = true,
                 placeholder = {
