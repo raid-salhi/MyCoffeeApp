@@ -139,9 +139,11 @@ fun CoffeeLoverAssemblage(navController: NavHostController, sharedViewModel: Sha
                         verticalArrangement = Arrangement.Center,
                         modifier = Modifier.padding(start = 20.dp)
                     ) {
+
                         Slider(
                             value = sliderValue,
                             onValueChange ={sliderValue=it} ,
+                            valueRange = 0f..100f,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(30.dp),
