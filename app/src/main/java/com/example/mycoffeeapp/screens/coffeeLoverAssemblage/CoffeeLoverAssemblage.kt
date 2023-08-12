@@ -274,7 +274,10 @@ fun CoffeeLoverAssemblage(navController: NavHostController, sharedViewModel: Sha
                 ) {
                     TextForm(text="Milk")
                     Button(
-                        onClick = { /*TODO*/ },
+                        onClick = {
+                            bottomSheetIem.value= BottomSheetItem(list = Constants.MILK_LIST, question = "What milk do you prefer?")
+                            openSheet=true
+                        },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = Color.White,
                             contentColor = IconColor
@@ -293,7 +296,10 @@ fun CoffeeLoverAssemblage(navController: NavHostController, sharedViewModel: Sha
                 ) {
                     TextForm(text="Syrup")
                     Button(
-                        onClick = { /*TODO*/ },
+                        onClick = {
+                            bottomSheetIem.value= BottomSheetItem(list = Constants.SYRUP_LIST, question = "What syrup do you prefer?")
+                            openSheet=true
+                                  },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = Color.White,
                             contentColor = IconColor
