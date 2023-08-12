@@ -82,6 +82,7 @@ fun OrderScreen(navController: NavController, sharedViewModel: SharedViewModel){
     {
         val coffee = sharedViewModel.coffee
         val order =sharedViewModel.order!!
+        val assemblage = order.assemblage
 
         var switchCheck by remember {
             mutableStateOf(!order.time.isNullOrBlank())
@@ -324,7 +325,8 @@ fun OrderScreen(navController: NavController, sharedViewModel: SharedViewModel){
                                 place = if (!orderPlace) "Onsite" else "Takeaway",
                                 volume = if (volume==1) 250 else if (volume==2) 350 else 450,
                                 time = if (switchCheck) formattedTime.value else null,
-                                totalPrice = price
+                                totalPrice = price,
+                                assemblage = assemblage
                             )
                         )
                         navController.navigate(Routes.CoffeeLoverAssemblage.name)
