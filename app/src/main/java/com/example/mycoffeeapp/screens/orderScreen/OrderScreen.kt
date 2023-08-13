@@ -624,6 +624,7 @@ fun PaymentSheet(price:Double,navController: NavController,onDismiss:()->Unit){
                             text = "Alex",
                             fontSize = 12.sp,
                             color = MainText,
+                            fontWeight = FontWeight.Bold,
                             fontFamily = FontFamily(Font(R.font.poppins_regular))
                         )
                         Text(
@@ -642,7 +643,8 @@ fun PaymentSheet(price:Double,navController: NavController,onDismiss:()->Unit){
                     subtitle = "Assist Belarus",
                     image = R.drawable.payment1,
                     selected=selected,
-                    option = 1
+                    option = 1,
+                    modifier = Modifier.size(100.dp,30.dp)
                 ){
                     selected=1
                 }
@@ -651,11 +653,12 @@ fun PaymentSheet(price:Double,navController: NavController,onDismiss:()->Unit){
                     subtitle = "2540 xxxx xxxx 2648",
                     image = R.drawable.payment2,
                     selected=selected,
-                    option = 2
+                    option = 2,
+                    modifier = Modifier.size(80.dp,20.dp)
                 ){
                     selected=2
                 }
-                Spacer(modifier = Modifier.height(150.dp))
+                Spacer(modifier = Modifier.height(130.dp))
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -706,7 +709,7 @@ fun PaymentSheet(price:Double,navController: NavController,onDismiss:()->Unit){
 }
 
 @Composable
-fun PaymentOptionRow(title: String,subtitle:String,image :Int,selected:Int,option:Int,onClick: () -> Unit) {
+fun PaymentOptionRow(title: String,modifier: Modifier,subtitle:String,image :Int,selected:Int,option:Int,onClick: () -> Unit) {
 
     Surface(
         modifier = Modifier
@@ -749,6 +752,7 @@ fun PaymentOptionRow(title: String,subtitle:String,image :Int,selected:Int,optio
             Image(
                 painter = painterResource(id = image),
                 contentDescription = "payment",
+                modifier = modifier,
                 contentScale = ContentScale.Fit
             )
         }
