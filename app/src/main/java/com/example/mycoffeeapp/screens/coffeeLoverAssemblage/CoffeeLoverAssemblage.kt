@@ -55,6 +55,7 @@ import com.example.mycoffeeapp.model.Order
 import com.example.mycoffeeapp.naviagtion.Routes
 import com.example.mycoffeeapp.screens.SharedViewModel
 import com.example.mycoffeeapp.screens.orderScreen.CustomTopBar
+import com.example.mycoffeeapp.screens.orderScreen.PaymentSheet
 import com.example.mycoffeeapp.screens.orderScreen.SeparateLine
 import com.example.mycoffeeapp.screens.orderScreen.TextForm
 import com.example.mycoffeeapp.ui.theme.ActiveBlue
@@ -84,6 +85,9 @@ fun CoffeeLoverAssemblage(
         }
 
         var openSheet by remember {
+            mutableStateOf(false)
+        }
+        var openPaymentSheet by remember {
             mutableStateOf(false)
         }
         var grindingChoice by remember {
@@ -117,6 +121,14 @@ fun CoffeeLoverAssemblage(
                 }
             ) {
                 openSheet=false
+            }
+        }
+        if (openPaymentSheet){
+            PaymentSheet(
+                price = order.totalPrice,
+                navController = navController,
+            ) {
+                openPaymentSheet=false
             }
         }
         Box(modifier = Modifier
@@ -450,7 +462,7 @@ fun CoffeeLoverAssemblage(
                     )
                 }
                 Button(
-                    onClick = { /*TODO*/ },
+                    onClick = { openPaymentSheet=true },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 10.dp, bottom = 10.dp),

@@ -134,7 +134,7 @@ fun OrderScreen(
 
         if (openSheet){
             PaymentSheet(
-                price = 3.00,
+                price = price,
                 navController = navController,
             ) {
                 openSheet=false
@@ -674,7 +674,7 @@ fun PaymentSheet(price:Double,navController: NavController,onDismiss:()->Unit){
                             fontFamily = FontFamily(Font(R.font.poppins_regular))
                         )
                         Text(
-                            text = "@ 3.00",
+                            text = "$ $price",
                             fontSize = 20.sp,
                             color = MainText,
                             fontFamily = FontFamily(Font(R.font.poppins_regular)),
