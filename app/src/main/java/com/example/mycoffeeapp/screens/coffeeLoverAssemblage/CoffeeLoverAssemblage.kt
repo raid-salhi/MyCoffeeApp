@@ -149,7 +149,30 @@ fun CoffeeLoverAssemblage(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     TextForm(text="Select a barista")
-                    IconButton(onClick = { navController.navigate(Routes.BaristaScreen.name) }) {
+                    IconButton(onClick = {
+                        sharedViewModel.sendOrder(
+                            Order(
+                                coffee = order.coffee,
+                                quantity = order.quantity,
+                                ristretto = order.ristretto,
+                                totalPrice = order.totalPrice,
+                                volume = order.volume,
+                                place = order.place,
+                                time = order.time,
+                                assemblage = Assemblage(
+                                    barista = barista,
+                                    coffeeType = sliderValue.toInt(),
+                                    coffeeSort=coffeeSort,
+                                    roastingDegree = roastingChoise,
+                                    grindingDegree=if (!grindingChoice) 1 else 2,
+                                    milk=milk,
+                                    syrup = syrup,
+                                    iceCubes = iceChoice
+                                )
+                            )
+                        )
+                        navController.navigate(Routes.BaristaScreen.name)
+                    }) {
                         Icon(
                             imageVector = Icons.Default.KeyboardArrowRight ,
                             contentDescription ="next",
@@ -455,7 +478,7 @@ fun CoffeeLoverAssemblage(
                     )
 
                     Text(
-                        text = order.totalPrice.toString(),
+                        text = "$"+order.totalPrice.toString(),
                         color = MainText,
                         fontSize = 18.sp,
                         fontFamily = FontFamily(Font(R.font.poppins_regular))
