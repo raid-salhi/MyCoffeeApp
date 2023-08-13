@@ -26,14 +26,19 @@ import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -46,10 +51,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
+import androidx.compose.ui.graphics.Color.Companion.Transparent
 import androidx.compose.ui.graphics.Color.Companion.White
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -59,6 +67,8 @@ import com.example.mycoffeeapp.model.Assemblage
 import com.example.mycoffeeapp.model.Order
 import com.example.mycoffeeapp.naviagtion.Routes
 import com.example.mycoffeeapp.screens.SharedViewModel
+import com.example.mycoffeeapp.screens.coffeeLoverAssemblage.MyBottomSheet
+import com.example.mycoffeeapp.ui.theme.Background
 import com.example.mycoffeeapp.ui.theme.IconColor
 import com.example.mycoffeeapp.ui.theme.IconColorSecondary
 import com.example.mycoffeeapp.ui.theme.MainText
@@ -69,6 +79,7 @@ import com.example.mycoffeeapp.ui.theme.borderColor
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.time.timepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
+import okio.blackholeSink
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
@@ -90,6 +101,9 @@ fun OrderScreen(
 
         var switchCheck by remember {
             mutableStateOf(!order.time.isNullOrBlank())
+        }
+        var openSheet by remember {
+            mutableStateOf(false)
         }
         var count by remember {
             mutableStateOf(order.quantity)
@@ -117,6 +131,15 @@ fun OrderScreen(
         val ristrettoPrice=if (!ristrettoChoice) 0.00 else 0.50
 
         val priceVolume=if (volume==2) 1.00 else if (volume==3) 1.50 else 0.00
+
+        if (openSheet){
+            PaymentSheet(
+                price = 3.00,
+                navController = navController,
+            ) {
+                openSheet=false
+            }
+        }
         Box(modifier = Modifier
             .fillMaxSize()
             .padding(it)){
@@ -365,7 +388,7 @@ fun OrderScreen(
                     )
                 }
                 Button(
-                    onClick = { /*TODO*/ },
+                    onClick = { openSheet=true },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 10.dp, bottom = 10.dp),
@@ -553,4 +576,181 @@ fun QuantityBox(count:Int,onIncreaseCount: () -> Unit,onDecreaseCount:()->Unit){
         }
     }
 }
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun PaymentSheet(price:Double,navController: NavController,onDismiss:()->Unit){
+    val bottomSheetState = rememberModalBottomSheetState()
+    var selected by remember {
+        mutableStateOf(1)
+    }
+    ModalBottomSheet(
+        sheetState =bottomSheetState ,
+        onDismissRequest = { onDismiss()},
+        shape = RoundedCornerShape(35.dp),
+        containerColor = White
+    ) {
+        Box(modifier =Modifier.background(Transparent) ){
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.TopCenter)
+                    .padding(start = 25.dp, end = 25.dp),
+                verticalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = "Order Payment",
+                    fontSize = 20.sp,
+                    color = MainText,
+                    fontFamily = FontFamily(Font(R.font.poppins_regular))
+                )
+                Spacer(modifier = Modifier.height(80.dp))
+                Row(Modifier.padding(start = 8.dp)) {
+                    Box(modifier = Modifier
+                        .size(50.dp)
+                        .background(Background)
+                        .clip(RoundedCornerShape(18.dp))){
+                        Icon(
+                            painter = painterResource(id =R.drawable.buy ),
+                            contentDescription = "buy",
+                            tint = IconColor,
+                            modifier = Modifier.size(26.dp).align(Alignment.Center)
+                        )
+                    }
+                    Column(
+                        Modifier.padding(start = 20.dp),
+                        verticalArrangement = Arrangement.SpaceAround
+                    ) {
+                        Text(
+                            text = "Alex",
+                            fontSize = 12.sp,
+                            color = MainText,
+                            fontFamily = FontFamily(Font(R.font.poppins_regular))
+                        )
+                        Text(
+                            text = "Bradford BD1 1PR ",
+                            fontSize = 10.sp,
+                            color = MainText,
+                            fontFamily = FontFamily(Font(R.font.poppins_regular)),
+                            fontWeight = FontWeight.Light
+                        )
 
+                    }
+                }
+                Spacer(modifier = Modifier.height(50.dp))
+                PaymentOptionRow(
+                    title = "Online payment",
+                    subtitle = "Assist Belarus",
+                    image = R.drawable.payment1,
+                    selected=selected,
+                    option = 1
+                ){
+                    selected=1
+                }
+                PaymentOptionRow(
+                    title = "Credit Card",
+                    subtitle = "2540 xxxx xxxx 2648",
+                    image = R.drawable.payment2,
+                    selected=selected,
+                    option = 2
+                ){
+                    selected=2
+                }
+                Spacer(modifier = Modifier.height(150.dp))
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(25.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column(verticalArrangement = Arrangement.SpaceAround) {
+                        Text(
+                            text = "Total price",
+                            fontSize = 12.sp,
+                            color = MainText.copy(0.3f),
+                            fontFamily = FontFamily(Font(R.font.poppins_regular))
+                        )
+                        Text(
+                            text = "@ 3.00",
+                            fontSize = 20.sp,
+                            color = MainText,
+                            fontFamily = FontFamily(Font(R.font.poppins_regular)),
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                    Button(
+                        onClick = { /*TODO*/ },
+                        shape = RoundedCornerShape(30.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = PrimaryColor,
+                            contentColor = White
+                        )
+                    ) {
+                        Row(horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically){
+                            Icon(painter = painterResource(id = R.drawable.card), contentDescription = "card", modifier = Modifier.padding(start = 30.dp))
+                            Text(
+                                text = "Pay now",
+                                fontSize = 14.sp,
+                                color = White,
+                                fontFamily = FontFamily(Font(R.font.poppins_regular)),
+                                fontWeight = FontWeight.Bold,
+                                modifier = Modifier.padding(start = 15.dp, top = 15.dp, bottom = 15.dp, end = 30.dp )
+                            )
+                        }
+                    }
+                }
+            }
+
+        }
+    }
+}
+
+@Composable
+fun PaymentOptionRow(title: String,subtitle:String,image :Int,selected:Int,option:Int,onClick: () -> Unit) {
+
+    Surface(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 8.dp, end = 8.dp, top = 10.dp, bottom = 10.dp),
+        shape = RoundedCornerShape(12.dp),
+        color = Background,
+    ) {
+        Row(
+            Modifier.padding(20.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Row() {
+                RadioButton(
+                    selected = selected==option,
+                    onClick = { onClick() },
+                    colors = RadioButtonDefaults.colors(
+                        selectedColor = IconColor,
+                        unselectedColor = IconColor
+                    )
+                )
+                Column(
+                    Modifier.padding(start = 20.dp),
+                    verticalArrangement = Arrangement.SpaceAround) {
+                    Text(
+                        text = title,
+                        fontSize = 14.sp,
+                        color = MainText,
+                        fontFamily = FontFamily(Font(R.font.poppins_regular))
+                    )
+                    Text(
+                        text =subtitle,
+                        fontSize = 10.sp,
+                        color = MainText.copy(0.3f),
+                        fontFamily = FontFamily(Font(R.font.poppins_regular)),
+                    )
+                }
+            }
+            Image(
+                painter = painterResource(id = image),
+                contentDescription = "payment",
+                contentScale = ContentScale.Fit
+            )
+        }
+    }
+}
