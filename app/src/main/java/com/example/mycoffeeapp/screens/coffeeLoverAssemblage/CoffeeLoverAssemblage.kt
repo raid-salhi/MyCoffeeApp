@@ -141,7 +141,7 @@ fun CoffeeLoverAssemblage(
                         Icon(
                             imageVector = Icons.Default.KeyboardArrowRight ,
                             contentDescription ="next",
-                            tint = IconColor
+                            tint = if (barista == null) IconColor else ActiveBlue
                         )
                     }
                 }
@@ -218,7 +218,7 @@ fun CoffeeLoverAssemblage(
                             contentColor = IconColor
                         )
                     ) {
-                        TextForm(text="Select")
+                        SelectedText(argument = coffeeSort, condition = "Custom")
                     }
                 }
                 SeparateLine()
@@ -334,7 +334,7 @@ fun CoffeeLoverAssemblage(
                             contentColor = IconColor
                         )
                     ) {
-                        TextForm(text="Select")
+                        SelectedText(argument = milk, condition = "None")
                     }
                 }
                 SeparateLine()
@@ -359,7 +359,7 @@ fun CoffeeLoverAssemblage(
                             contentColor = IconColor
                         )
                     ) {
-                        TextForm(text="Select")
+                        SelectedText(syrup,"None")
                     }
                 }
                 SeparateLine()
@@ -371,12 +371,12 @@ fun CoffeeLoverAssemblage(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    TextForm(text="Roasting")
+                    TextForm(text="Ice")
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         IconButton(onClick = { iceChoice=1 }, modifier = Modifier.padding(start = 10.dp)) {
                             Icon(
                                 painter = painterResource(id = R.drawable.ice) ,
-                                contentDescription ="roasting",
+                                contentDescription ="ice",
                                 tint = if (iceChoice==1)IconColor else IconColorSecondary
                             )
                         }
@@ -388,12 +388,12 @@ fun CoffeeLoverAssemblage(
                             val iceColor = if (iceChoice==2) IconColor else IconColorSecondary
                             Icon(
                                 painter = painterResource(id = R.drawable.ice) ,
-                                contentDescription ="roasting",
+                                contentDescription ="ice",
                                 tint = iceColor
                             )
                             Icon(
                                 painter = painterResource(id = R.drawable.ice) ,
-                                contentDescription ="roasting",
+                                contentDescription ="ice",
                                 tint = iceColor
                             )
                         }
@@ -404,18 +404,18 @@ fun CoffeeLoverAssemblage(
                             val iceColor = if (iceChoice==3) IconColor else IconColorSecondary
                             Icon(
                                 painter = painterResource(id = R.drawable.ice) ,
-                                contentDescription ="roasting",
+                                contentDescription ="ice",
                                 tint = iceColor
                             )
                             Row() {
                                 Icon(
                                     painter = painterResource(id = R.drawable.ice) ,
-                                    contentDescription ="roasting",
+                                    contentDescription ="ice",
                                     tint = iceColor
                                 )
                                 Icon(
                                     painter = painterResource(id = R.drawable.ice) ,
-                                    contentDescription ="roasting",
+                                    contentDescription ="icd",
                                     tint = iceColor
                                 )
                             }
@@ -484,6 +484,16 @@ fun CoffeeLoverAssemblage(
             }
         }
     }
+}
+
+@Composable
+fun SelectedText(argument: String,condition:String) {
+    Text(
+        text = if (argument!=condition) "Selected" else "Select",
+        color = if (argument!=condition) ActiveBlue else MainText,
+        fontSize = 16.sp,
+        fontFamily = FontFamily(Font(R.font.dmsans_medium))
+    )
 }
 
 @Composable
