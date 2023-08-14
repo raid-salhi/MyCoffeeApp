@@ -11,9 +11,10 @@ import androidx.navigation.compose.rememberNavController
 import com.example.mycoffeeapp.model.Assemblage
 import com.example.mycoffeeapp.model.Barista
 import com.example.mycoffeeapp.screens.SharedViewModel
-import com.example.mycoffeeapp.screens.coffeeLoverAssemblage.BaristaScreen
-import com.example.mycoffeeapp.screens.coffeeLoverAssemblage.CoffeeLoverAssemblage
+import com.example.mycoffeeapp.screens.orderScreen.coffeeLoverAssemblage.BaristaScreen
+import com.example.mycoffeeapp.screens.orderScreen.coffeeLoverAssemblage.CoffeeLoverAssemblage
 import com.example.mycoffeeapp.screens.homeScreen.HomeScreen
+import com.example.mycoffeeapp.screens.orderScreen.FinishedOrderScreen
 import com.example.mycoffeeapp.screens.orderScreen.OrderScreen
 import com.example.mycoffeeapp.screens.signIn.SignIn
 import com.example.mycoffeeapp.screens.signUp.SignUp
@@ -51,6 +52,9 @@ fun AppNavigation(){
         }
         composable(route = Routes.BaristaScreen.name) {
             BaristaScreen(navController = navController,sharedViewModel)
+        }
+        composable(route = Routes.FinishedOrderScreen.name) {
+            FinishedOrderScreen(navController = navController)
         }
     }
 

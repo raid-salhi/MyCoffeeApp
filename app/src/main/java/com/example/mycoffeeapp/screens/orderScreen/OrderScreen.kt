@@ -67,7 +67,7 @@ import com.example.mycoffeeapp.model.Assemblage
 import com.example.mycoffeeapp.model.Order
 import com.example.mycoffeeapp.naviagtion.Routes
 import com.example.mycoffeeapp.screens.SharedViewModel
-import com.example.mycoffeeapp.screens.coffeeLoverAssemblage.MyBottomSheet
+import com.example.mycoffeeapp.screens.orderScreen.coffeeLoverAssemblage.MyBottomSheet
 import com.example.mycoffeeapp.ui.theme.Background
 import com.example.mycoffeeapp.ui.theme.IconColor
 import com.example.mycoffeeapp.ui.theme.IconColorSecondary
@@ -682,7 +682,7 @@ fun PaymentSheet(price:Double,navController: NavController,onDismiss:()->Unit){
                         )
                     }
                     Button(
-                        onClick = { /*TODO*/ },
+                        onClick = { navController.navigate(Routes.FinishedOrderScreen.name) },
                         shape = RoundedCornerShape(30.dp),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = PrimaryColor,

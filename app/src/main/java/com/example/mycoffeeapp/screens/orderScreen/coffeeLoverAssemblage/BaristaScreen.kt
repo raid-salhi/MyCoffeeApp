@@ -1,4 +1,4 @@
-package com.example.mycoffeeapp.screens.coffeeLoverAssemblage
+package com.example.mycoffeeapp.screens.orderScreen.coffeeLoverAssemblage
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
