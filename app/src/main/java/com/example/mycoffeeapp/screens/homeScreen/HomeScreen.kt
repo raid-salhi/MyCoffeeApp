@@ -89,7 +89,7 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel){
                             modifier = Modifier.size(26.dp)
                         )
                     }
-                    IconButton(onClick = { /*TODO*/ }) {
+                    IconButton(onClick = { navController.navigate(Routes.ProfileScreen.name) }) {
                         Icon(
                             painter = painterResource(id = R.drawable.profile),
                             contentDescription = "profile",

@@ -44,6 +44,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -53,6 +54,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.graphics.Color.Companion.Transparent
 import androidx.compose.ui.graphics.Color.Companion.White
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
@@ -79,6 +81,7 @@ import com.example.mycoffeeapp.ui.theme.borderColor
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.time.timepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
+import kotlinx.coroutines.launch
 import okio.blackholeSink
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
@@ -93,7 +96,7 @@ fun OrderScreen(
 ){
 
     Scaffold(topBar = {
-        CustomTopBar("Order")
+        CustomTopBar("Order", actionIcon =  R.drawable.buy)
     })
     {
         val coffee = sharedViewModel.coffee
@@ -418,7 +421,7 @@ fun dateFormatter(time: String): LocalTime? {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CustomTopBar(title: String,navigationClick :()->Unit={},actionClick :()->Unit={}) {
+fun CustomTopBar(title: String,actionIcon:Int?=null,navigationClick :()->Unit={},actionClick :()->Unit={}) {
     CenterAlignedTopAppBar(
         title = {
             Text(text = title)
@@ -432,12 +435,14 @@ fun CustomTopBar(title: String,navigationClick :()->Unit={},actionClick :()->Uni
             }
         },
         actions = {
-            IconButton(onClick = { actionClick() }) {
-                Icon(
-                    painter = painterResource(id = R.drawable.buy),
-                    contentDescription = "buy",
-                    modifier = Modifier.size(26.dp)
-                )
+            if (actionIcon!=null){
+                IconButton(onClick = { actionClick() }) {
+                    Icon(
+                        painter = painterResource(id =actionIcon),
+                        contentDescription = "buy",
+                        modifier = Modifier.size(26.dp)
+                    )
+                }
             }
         },
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
@@ -580,6 +585,7 @@ fun QuantityBox(count:Int,onIncreaseCount: () -> Unit,onDecreaseCount:()->Unit){
 @Composable
 fun PaymentSheet(price:Double,navController: NavController,onDismiss:()->Unit){
     val bottomSheetState = rememberModalBottomSheetState()
+    val coroutine = rememberCoroutineScope()
     var selected by remember {
         mutableStateOf(1)
     }
@@ -613,7 +619,9 @@ fun PaymentSheet(price:Double,navController: NavController,onDismiss:()->Unit){
                             painter = painterResource(id =R.drawable.buy ),
                             contentDescription = "buy",
                             tint = IconColor,
-                            modifier = Modifier.size(26.dp).align(Alignment.Center)
+                            modifier = Modifier
+                                .size(26.dp)
+                                .align(Alignment.Center)
                         )
                     }
                     Column(
@@ -682,7 +690,10 @@ fun PaymentSheet(price:Double,navController: NavController,onDismiss:()->Unit){
                         )
                     }
                     Button(
-                        onClick = { navController.navigate(Routes.FinishedOrderScreen.name) },
+                        onClick = {
+                            coroutine.launch { bottomSheetState.hide() }
+                            navController.navigate(Routes.FinishedOrderScreen.name)
+                                  },
                         shape = RoundedCornerShape(30.dp),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = PrimaryColor,

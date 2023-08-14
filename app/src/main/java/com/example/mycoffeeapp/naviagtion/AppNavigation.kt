@@ -16,6 +16,7 @@ import com.example.mycoffeeapp.screens.orderScreen.coffeeLoverAssemblage.CoffeeL
 import com.example.mycoffeeapp.screens.homeScreen.HomeScreen
 import com.example.mycoffeeapp.screens.orderScreen.FinishedOrderScreen
 import com.example.mycoffeeapp.screens.orderScreen.OrderScreen
+import com.example.mycoffeeapp.screens.profileScreen.ProfileScreen
 import com.example.mycoffeeapp.screens.signIn.SignIn
 import com.example.mycoffeeapp.screens.signUp.SignUp
 import com.example.mycoffeeapp.screens.splashScreen.SplashScreen
@@ -56,6 +57,10 @@ fun AppNavigation(){
         composable(route = Routes.FinishedOrderScreen.name) {
             FinishedOrderScreen(navController = navController)
         }
+        composable(route = Routes.ProfileScreen.name) {
+            ProfileScreen(navController = navController)
+        }
+
     }
 
 }

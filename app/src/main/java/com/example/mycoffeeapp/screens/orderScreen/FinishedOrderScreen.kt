@@ -28,7 +28,7 @@ import kotlinx.coroutines.delay
 @Composable
 fun FinishedOrderScreen (navController: NavController){
     LaunchedEffect(key1 = true, block = {
-        delay(1000)
+        delay(2000)
         navController.popBackStack()
         navController.navigate(Routes.HomeScreen.name)
     })
