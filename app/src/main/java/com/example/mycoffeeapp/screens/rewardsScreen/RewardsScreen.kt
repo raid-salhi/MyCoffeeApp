@@ -1,12 +1,17 @@
 package com.example.mycoffeeapp.screens.rewardsScreen
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -17,7 +22,9 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -55,11 +62,11 @@ fun RewardsScreen (navController: NavController) {
                 .fillMaxSize()
         ) {
             LoyaltyCard()
-
+            RedeemCard()
         }
     }
 }
-@Preview
+
 @Composable
 fun LoyaltyCard() {
     Surface(
@@ -75,7 +82,10 @@ fun LoyaltyCard() {
                 .fillMaxWidth()
                 .padding(start = 25.dp, end = 25.dp, top = 15.dp, bottom = 15.dp)
         ) {
-            Row(Modifier.padding( bottom = 10.dp).fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+            Row(
+                Modifier
+                    .padding(bottom = 10.dp)
+                    .fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                 Text(
                     text = "Loyalty Card",
                     color = IconColorSecondary,
@@ -100,7 +110,9 @@ fun LoyaltyCard() {
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxWidth().padding(15.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(15.dp)
                 ) {
                     for (i in 1..4){
                         Icon(painter = painterResource(id = R.drawable.filled_cup), contentDescription = "loyalty", tint = IconColor)
@@ -110,6 +122,71 @@ fun LoyaltyCard() {
                     }
                 }
             }
+        }
+    }
+}
+@Preview
+@Composable
+fun RedeemCard(points:Int=2750,onClick:()->Unit={}){
+    Surface(
+        shape = RoundedCornerShape(12.dp),
+        color = PrimaryColor,
+        modifier = Modifier
+            .padding(bottom = 15.dp)
+            .fillMaxWidth()
+    ){
+        Box(modifier = Modifier.fillMaxWidth()) {
+            Image(
+                painter = painterResource(id = R.drawable.beans_img),
+                contentDescription = "beans",
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .size(66.dp)
+                    .padding(top = 15.dp, start = 15.dp)
+            )
+            Row(
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .fillMaxWidth()
+                    .padding(25.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Column() {
+                    Text(
+                        text = "My Points",
+                        color = IconColorSecondary,
+                        fontFamily = FontFamily(Font(R.font.poppins_regular)),
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Medium
+                    )
+                    Text(
+                        text = points.toString(),
+                        color = IconColorSecondary,
+                        fontFamily = FontFamily(Font(R.font.poppins_regular)),
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
+                Button(
+                    onClick = { onClick() },
+                    shape= RoundedCornerShape(12.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor =  Color(0x30A2CDE9),
+                        contentColor = IconColorSecondary
+                    )
+                ) {
+                    Text(
+                        text = "Redeem drinks",
+                        color = IconColorSecondary,
+                        fontFamily = FontFamily(Font(R.font.poppins_regular)),
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Medium,
+                        modifier = Modifier.padding(5.dp)
+                    )
+                }
+            }
+
         }
     }
 }
