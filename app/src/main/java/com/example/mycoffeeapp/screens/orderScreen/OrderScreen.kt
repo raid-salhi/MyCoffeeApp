@@ -129,7 +129,7 @@ fun OrderScreen(
             }
         }
         var price by remember {
-            mutableStateOf(order!!.totalPrice)
+            mutableStateOf(order.totalPrice)
         }
         val ristrettoPrice=if (!ristrettoChoice) 0.00 else 0.50
 

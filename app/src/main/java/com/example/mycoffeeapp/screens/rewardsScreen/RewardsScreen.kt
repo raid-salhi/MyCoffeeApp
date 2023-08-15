@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -34,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.mycoffeeapp.R
+import com.example.mycoffeeapp.screens.orderScreen.SeparateLine
 import com.example.mycoffeeapp.ui.theme.IconColor
 import com.example.mycoffeeapp.ui.theme.IconColorSecondary
 import com.example.mycoffeeapp.ui.theme.PrimaryColor
@@ -41,6 +44,7 @@ import com.example.mycoffeeapp.ui.theme.PrimaryColor
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RewardsScreen (navController: NavController) {
+    val list = listOf("Americano","Latte","Raf","Flat White","Cappuccino")
     Scaffold (
         topBar = {
             CenterAlignedTopAppBar(
@@ -63,7 +67,58 @@ fun RewardsScreen (navController: NavController) {
         ) {
             LoyaltyCard()
             RedeemCard()
+            Text(
+                text = "History Rewards",
+                fontSize = 14.sp,
+                fontFamily = FontFamily(Font(R.font.poppins_regular)),
+                fontWeight = FontWeight.Bold,
+                color = PrimaryColor,
+                modifier = Modifier.padding(top = 15.dp, start = 5.dp)
+            )
+            LazyColumn(Modifier.padding(top = 10.dp, start = 5.dp)){
+                items(list){
+                    HistoryRewards(it)
+                    SeparateLine()
+                }
+            }
         }
+    }
+}
+
+@Composable
+fun HistoryRewards(coffee: String) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 15.dp, bottom = 20.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Column {
+            Text(
+                text = coffee,
+                fontSize = 12.sp,
+                fontFamily = FontFamily(Font(R.font.poppins_regular)),
+                fontWeight = FontWeight.Bold,
+                color = PrimaryColor,
+                modifier = Modifier.padding(bottom = 5.dp)
+            )
+            Text(
+                text = "24 June | 12:30",
+                fontSize = 10.sp,
+                fontFamily = FontFamily(Font(R.font.poppins_regular)),
+                fontWeight = FontWeight.Medium,
+                color = PrimaryColor.copy(0.3f),
+                modifier = Modifier.padding(bottom = 5.dp)
+            )
+        }
+        Text(
+            text = "+ 12 Pts",
+            fontSize = 16.sp,
+            fontFamily = FontFamily(Font(R.font.poppins_regular)),
+            fontWeight = FontWeight.Bold,
+            color = PrimaryColor
+        )
     }
 }
 
