@@ -17,6 +17,7 @@ import com.example.mycoffeeapp.screens.homeScreen.HomeScreen
 import com.example.mycoffeeapp.screens.orderScreen.FinishedOrderScreen
 import com.example.mycoffeeapp.screens.orderScreen.OrderScreen
 import com.example.mycoffeeapp.screens.profileScreen.ProfileScreen
+import com.example.mycoffeeapp.screens.rewardsScreen.RedeemScreen
 import com.example.mycoffeeapp.screens.rewardsScreen.RewardsScreen
 import com.example.mycoffeeapp.screens.signIn.SignIn
 import com.example.mycoffeeapp.screens.signUp.SignUp
@@ -64,7 +65,9 @@ fun AppNavigation(){
         composable(route = Routes.RewardsScreen.name) {
             RewardsScreen(navController = navController)
         }
-
+        composable(route = Routes.RedeemScreen.name) {
+            RedeemScreen(navController = navController)
+        }
     }
 
 }

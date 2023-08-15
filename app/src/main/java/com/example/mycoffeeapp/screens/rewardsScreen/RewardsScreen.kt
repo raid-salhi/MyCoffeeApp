@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.mycoffeeapp.R
+import com.example.mycoffeeapp.naviagtion.Routes
 import com.example.mycoffeeapp.screens.orderScreen.SeparateLine
 import com.example.mycoffeeapp.ui.theme.IconColor
 import com.example.mycoffeeapp.ui.theme.IconColorSecondary
@@ -66,7 +67,9 @@ fun RewardsScreen (navController: NavController) {
                 .fillMaxSize()
         ) {
             LoyaltyCard()
-            RedeemCard()
+            RedeemCard(){
+                navController.navigate(Routes.RedeemScreen.name)
+            }
             Text(
                 text = "History Rewards",
                 fontSize = 14.sp,

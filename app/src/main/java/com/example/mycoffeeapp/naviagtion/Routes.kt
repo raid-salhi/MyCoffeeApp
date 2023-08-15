@@ -11,5 +11,6 @@ enum class Routes {
     CoffeeLoverAssemblage,
     BaristaScreen,
     FinishedOrderScreen,
-    ProfileScreen
+    ProfileScreen,
+    RedeemScreen
 }
