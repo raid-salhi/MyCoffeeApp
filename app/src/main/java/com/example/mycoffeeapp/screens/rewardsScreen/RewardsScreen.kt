@@ -63,7 +63,7 @@ fun RewardsScreen (navController: NavController) {
     ) {
         Column(
             modifier = Modifier
-                .padding(top = it.calculateTopPadding(), start = 25.dp, end = 25.dp)
+                .padding(top = it.calculateTopPadding(), start = 25.dp, end = 25.dp,)
                 .fillMaxSize()
         ) {
             LoyaltyCard()
@@ -78,7 +78,7 @@ fun RewardsScreen (navController: NavController) {
                 color = PrimaryColor,
                 modifier = Modifier.padding(top = 15.dp, start = 5.dp)
             )
-            LazyColumn(Modifier.padding(top = 10.dp, start = 5.dp)){
+            LazyColumn(Modifier.padding(top = 10.dp, start = 5.dp, bottom = 120.dp)){
                 items(list){
                     HistoryRewards(it)
                     SeparateLine()

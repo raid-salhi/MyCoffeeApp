@@ -161,6 +161,7 @@ fun CoffeeCardItem(coffee: Coffee, navController: NavController, sharedViewModel
                 text = coffee.name,
                 fontSize = 14.sp,
                 fontFamily = FontFamily.Serif,
+                color= IconColor,
                 modifier = Modifier.padding(top = 10.dp)
             )
             
