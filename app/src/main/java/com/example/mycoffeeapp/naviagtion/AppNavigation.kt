@@ -29,6 +29,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.mycoffeeapp.model.Assemblage
 import com.example.mycoffeeapp.model.Barista
+import com.example.mycoffeeapp.screens.MyOrderScreen.MyOrderScreen
 import com.example.mycoffeeapp.screens.SharedViewModel
 import com.example.mycoffeeapp.screens.orderScreen.coffeeLoverAssemblage.BaristaScreen
 import com.example.mycoffeeapp.screens.orderScreen.coffeeLoverAssemblage.CoffeeLoverAssemblage
@@ -96,6 +97,9 @@ fun AppNavigation(){
             composable(route = Routes.RedeemScreen.name) {
                 RedeemScreen(navController = navController)
             }
+            composable(route=Routes.MyOrderScreen.name){
+                MyOrderScreen(navController = navController)
+            }
         }
     }
 
@@ -140,12 +144,14 @@ fun MyBottomBar(navController: NavHostController) {
                         painter = painterResource(id = item.icon),
                         contentDescription = "icon",
                         tint = if (selected) PrimaryColor else onPrimaryColor,
-                        modifier = Modifier.size(22.dp).clickable {
-                            navController.navigate(item.route) {
-                                popUpTo(navController.graph.findStartDestination().id)
-                                launchSingleTop = true
+                        modifier = Modifier
+                            .size(22.dp)
+                            .clickable {
+                                navController.navigate(item.route) {
+                                    popUpTo(navController.graph.findStartDestination().id)
+                                    launchSingleTop = true
+                                }
                             }
-                        }
                     )
                 }
             }
