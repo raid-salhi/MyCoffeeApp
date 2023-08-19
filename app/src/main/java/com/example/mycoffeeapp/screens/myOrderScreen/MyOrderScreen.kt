@@ -1,15 +1,18 @@
 package com.example.mycoffeeapp.screens.myOrderScreen
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
@@ -72,17 +75,23 @@ fun TabsContent(pagerState: PagerState) {
         if (page==0) OnGoingPage() else HistoryPage()
     }
 }
+@Composable
+fun MyOrderRow(){
+
+}
 
 @Composable
 fun OnGoingPage() {
     Column(
 
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
 
-        Text(text = "going",)
+        Text(text = "going")
     }
 }
 
@@ -112,13 +121,18 @@ fun Tabs(pagerState: PagerState) {
         containerColor = Color.White,
         indicator = {
             TabRowDefaults.Indicator(
-                modifier = Modifier
-                    .tabIndicatorOffset(currentTabPosition = it[pagerState.currentPage])
-                    .width(100.dp),
+                modifier = Modifier.tabIndicatorOffset(currentTabPosition = it[pagerState.currentPage]),
                 height = 2.dp,
                 color = PrimaryColor
             )
         },
+        divider = {
+            Divider(
+                modifier = Modifier.fillMaxWidth(),
+                thickness = 1.dp,
+                color = IconColorSecondary
+            )
+        }
     ) {
         list.forEachIndexed { index, title ->
             Tab(
@@ -134,7 +148,7 @@ fun Tabs(pagerState: PagerState) {
                         color = if (pagerState.currentPage==index) PrimaryColor else IconColorSecondary,
                         fontFamily = FontFamily(Font(R.font.poppins_regular)),
                         fontSize = 14.sp,
-                        fontWeight = FontWeight.Medium
+                        fontWeight = FontWeight.Bold
                     )
                 },
             )
