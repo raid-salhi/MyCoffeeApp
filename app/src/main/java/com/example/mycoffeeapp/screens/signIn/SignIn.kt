@@ -47,6 +47,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.room.util.newStringBuilder
 import com.example.mycoffeeapp.ui.theme.MainText
@@ -58,8 +59,14 @@ import com.example.mycoffeeapp.ui.theme.PrimaryColor
 
 
 @Composable
-fun SignIn(navController: NavController){
+fun SignIn(navController: NavController,singInViewModel: SignInViewModel= hiltViewModel()){
     Surface(modifier = Modifier.fillMaxSize(), color = Color.White ) {
+        var email by remember {
+            mutableStateOf("")
+        }
+        var password by remember {
+            mutableStateOf("")
+        }
         Column(modifier = Modifier
             .fillMaxSize()
             .padding(45.dp)
@@ -79,13 +86,24 @@ fun SignIn(navController: NavController){
                 modifier = Modifier.padding(top=25.dp,bottom = 50.dp)
             )
 
-            MyTextField("Email address",
+            MyTextField(
+                email,
+                "Email address",
                 keyboardOptions =  KeyboardOptions(keyboardType = KeyboardType.Email),
-                icon= R.drawable.message )
-            MyTextField("Password",
+                icon= R.drawable.message
+            ){
+                email=it
+            }
+
+            MyTextField(
+                password,
+                "Password",
                 keyboardOptions =  KeyboardOptions(keyboardType = KeyboardType.Password),
                 icon= R.drawable.lock,
-                trailingIcon = R.drawable.show)
+                trailingIcon = R.drawable.show
+            ){
+                password=it
+            }
             Text(
                 text ="Forgot Password?",
                 fontSize = 14.sp,
@@ -97,7 +115,12 @@ fun SignIn(navController: NavController){
                     .align(Alignment.CenterHorizontally)
             )
             Spacer(modifier = Modifier.height(140.dp))
-            MyButton(action = {},modifier = Modifier.align(Alignment.End))
+            MyButton(
+                action = {
+                    singInViewModel.signIn(email, password)
+                },
+                modifier = Modifier.align(Alignment.End),
+            )
             Spacer(modifier = Modifier.height(140.dp))
 
             Text(

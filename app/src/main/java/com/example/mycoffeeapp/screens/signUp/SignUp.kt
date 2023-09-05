@@ -11,6 +11,10 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,6 +27,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.mycoffeeapp.R
 import com.example.mycoffeeapp.componants.MyButton
@@ -31,8 +36,20 @@ import com.example.mycoffeeapp.naviagtion.Routes
 import com.example.mycoffeeapp.ui.theme.MainText
 
 @Composable
-fun SignUp(navController: NavController){
+fun SignUp(navController: NavController,signUpViewModel: SignUpViewModel= hiltViewModel()){
     Surface(modifier = Modifier.fillMaxSize(), color = Color.White ) {
+        var email by remember {
+            mutableStateOf("")
+        }
+        var password by remember {
+            mutableStateOf("")
+        }
+        var name by remember {
+            mutableStateOf("")
+        }
+        var phoneNumber by remember {
+            mutableStateOf("")
+        }
         Column(modifier = Modifier
             .fillMaxSize()
             .padding(45.dp)
@@ -52,19 +69,39 @@ fun SignUp(navController: NavController){
                 modifier = Modifier.padding(top=25.dp,bottom = 50.dp)
             )
 
-            MyTextField("Full name",
+            MyTextField(
+                name,
+                "Full name",
                 keyboardOptions =  KeyboardOptions(keyboardType = KeyboardType.Text),
-                icon= R.drawable.profile )
-            MyTextField("Mobile number",
+                icon= R.drawable.profile
+            ){
+                name=it
+            }
+            MyTextField(
+                phoneNumber,
+                "Mobile number",
                 keyboardOptions =  KeyboardOptions(keyboardType = KeyboardType.Number),
-                icon= R.drawable.smartphone )
-            MyTextField("Email address",
+                icon= R.drawable.smartphone
+            ){
+                phoneNumber=it
+            }
+            MyTextField(
+                email,
+                "Email address",
                 keyboardOptions =  KeyboardOptions(keyboardType = KeyboardType.Email),
-                icon= R.drawable.message )
-            MyTextField("Password",
+                icon= R.drawable.message
+            ){
+                email=it
+            }
+            MyTextField(
+                password,
+                "Password",
                 keyboardOptions =  KeyboardOptions(keyboardType = KeyboardType.Password),
                 icon= R.drawable.lock,
-                trailingIcon = R.drawable.show)
+                trailingIcon = R.drawable.show
+            ){
+                password=it
+            }
             Text(
                 text ="By signing up you agree with our Terms of Use",
                 fontSize = 12.sp,
@@ -75,7 +112,11 @@ fun SignUp(navController: NavController){
                     .align(Alignment.CenterHorizontally)
             )
             Spacer(modifier = Modifier.height(14.dp))
-            MyButton(action = {},modifier = Modifier.align(Alignment.End))
+            MyButton(
+                action = {
+                    signUpViewModel.signUp(email, password)
+                },
+                modifier = Modifier.align(Alignment.End))
             Spacer(modifier = Modifier.height(140.dp))
 
             Text(

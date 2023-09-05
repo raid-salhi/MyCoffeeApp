@@ -70,15 +70,15 @@ fun MyButton(action: () -> Unit,modifier: Modifier) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyTextField(
+    text:String,
     placeHolder: String,
     keyboardOptions: KeyboardOptions,
     icon: Int,
-    trailingIcon : Int? = null
+    trailingIcon : Int? = null,
+    onTextChange :(String)->Unit
 
     ) {
-    var text by remember {
-        mutableStateOf("")
-    }
+
     val interactionSource = remember {
         MutableInteractionSource()
     }
@@ -110,7 +110,7 @@ fun MyTextField(
             TextField(
                 value = text,
                 onValueChange ={
-                    text=it
+                    onTextChange(it)
                 },
                 colors = TextFieldDefaults.colors(
                     focusedContainerColor = Color.White,

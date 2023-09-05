@@ -14,9 +14,11 @@ class SplashScreenViewModel  @Inject constructor(
 ) : ViewModel() {
     private val resultChannel = Channel<AuthResult<Unit>>()
     val authResults = resultChannel.receiveAsFlow()
-    fun authenticate(email:String,password:String){
+    init {
+        authenticate()
+    }
+    private fun authenticate(){
         viewModelScope.launch {
-
             val result = repository.authenticate()
             resultChannel.send(result)
         }

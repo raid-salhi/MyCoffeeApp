@@ -1,5 +1,6 @@
 package com.example.mycoffeeapp.screens.splashScreen
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -15,23 +16,42 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.mycoffeeapp.R
+import com.example.mycoffeeapp.model.auth.AuthResult
 import com.example.mycoffeeapp.naviagtion.Routes
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
 
 @Composable
-fun SplashScreen(navController: NavController) {
+fun SplashScreen(navController: NavController,splashScreenViewModel: SplashScreenViewModel= hiltViewModel()) {
+    val context= LocalContext.current
     LaunchedEffect(key1 = true, block = {
+        splashScreenViewModel.authResults.collect{result ->
+            when(result){
+                is AuthResult.Authorized ->{
+                    navController.navigate(Routes.HomeScreen.name)
+                    navController.popBackStack()
+                }
+                is AuthResult.Unauthorized ->{
+                    navController.navigate(Routes.SignInScreen.name)
+                    navController.popBackStack()
+                }
+                is AuthResult.UnknownError ->{
+                    Toast.makeText(context, "Unknown Error", Toast.LENGTH_LONG).show()
+                }
+            }
+
+        }
         delay(500)
-        navController.navigate(Routes.SignInScreen.name)
-        navController.popBackStack()
     })
     Box(modifier =Modifier.fillMaxSize() ){
         Image(
