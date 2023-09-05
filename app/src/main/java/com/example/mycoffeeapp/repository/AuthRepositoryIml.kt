@@ -1,10 +1,12 @@
 package com.example.mycoffeeapp.repository
 
 import android.content.SharedPreferences
+import android.util.Log
 import com.example.mycoffeeapp.model.auth.AuthRequest
 import com.example.mycoffeeapp.model.auth.AuthResult
 import com.example.mycoffeeapp.network.AuthApi
 import retrofit2.HttpException
+import kotlin.math.log
 
 class AuthRepositoryIml(  private val api: AuthApi, private val preferences: SharedPreferences) : AuthRepository{
     override suspend fun signUp(email: String, password: String): AuthResult<Unit> {
@@ -24,9 +26,11 @@ class AuthRepositoryIml(  private val api: AuthApi, private val preferences: Sha
             if(e.code() == 401) {
                 AuthResult.Unauthorized()
             } else {
+                Log.d("TAG", "signUp: ${e.code()}")
                 AuthResult.UnknownError()
             }
         } catch (e: Exception) {
+            Log.d("TAG", "signUp: ${e.localizedMessage}")
             AuthResult.UnknownError()
         }
     }
@@ -40,7 +44,7 @@ class AuthRepositoryIml(  private val api: AuthApi, private val preferences: Sha
                 )
             )
             preferences.edit()
-                .putString("jwt",response)
+                .putString("jwt",response.value)
                 .apply()
             AuthResult.Authorized()
 
@@ -70,4 +74,5 @@ class AuthRepositoryIml(  private val api: AuthApi, private val preferences: Sha
             AuthResult.UnknownError()
         }
     }
+
 }

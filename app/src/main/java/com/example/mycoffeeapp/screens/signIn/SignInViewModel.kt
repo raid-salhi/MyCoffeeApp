@@ -1,5 +1,9 @@
 package com.example.mycoffeeapp.screens.signIn
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mycoffeeapp.model.auth.AuthResult
@@ -16,6 +20,7 @@ class SignInViewModel @Inject constructor(
 ) : ViewModel() {
     private val resultChannel = Channel<AuthResult<Unit>>()
     val authResults = resultChannel.receiveAsFlow()
+
     fun signIn(email:String,password:String){
         viewModelScope.launch {
 

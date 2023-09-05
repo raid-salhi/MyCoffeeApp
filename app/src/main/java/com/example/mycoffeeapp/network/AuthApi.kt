@@ -1,6 +1,7 @@
 package com.example.mycoffeeapp.network
 
 import com.example.mycoffeeapp.model.auth.AuthRequest
+import com.example.mycoffeeapp.model.auth.Token
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -16,7 +17,7 @@ interface AuthApi {
     @POST("signin")
     suspend fun signIn(
         @Body request: AuthRequest
-    ): String
+    ): Token
 
     @GET("authenticate")
     suspend fun authenticate(

@@ -60,7 +60,7 @@ fun AppNavigation(){
         }
             ) {
         val modifier=Modifier.padding(it)
-        NavHost(navController = navController, startDestination = Routes.HomeScreen.name) {
+        NavHost(navController = navController, startDestination = Routes.SplashScreen.name) {
             composable(route = Routes.SplashScreen.name) {
                 SplashScreen(navController = navController)
             }

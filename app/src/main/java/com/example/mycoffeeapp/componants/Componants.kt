@@ -115,6 +115,7 @@ fun MyTextField(
                 colors = TextFieldDefaults.colors(
                     focusedContainerColor = Color.White,
                     focusedPlaceholderColor = Color.LightGray,
+                    unfocusedContainerColor = Color.White,
                     unfocusedIndicatorColor = Color.White,
                     focusedIndicatorColor = Color.White,
                     cursorColor = MainText,

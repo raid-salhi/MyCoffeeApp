@@ -1,5 +1,6 @@
 package com.example.mycoffeeapp.repository
 
+import com.example.mycoffeeapp.model.auth.AuthRequest
 import com.example.mycoffeeapp.model.auth.AuthResult
 
 interface AuthRepository {

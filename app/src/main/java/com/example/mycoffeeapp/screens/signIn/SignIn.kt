@@ -1,5 +1,6 @@
 package com.example.mycoffeeapp.screens.signIn
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -36,6 +37,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -54,13 +56,23 @@ import com.example.mycoffeeapp.ui.theme.MainText
 import com.example.mycoffeeapp.R
 import com.example.mycoffeeapp.componants.MyButton
 import com.example.mycoffeeapp.componants.MyTextField
+import com.example.mycoffeeapp.model.auth.AuthResult
 import com.example.mycoffeeapp.naviagtion.Routes
 import com.example.mycoffeeapp.ui.theme.PrimaryColor
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 
+@OptIn(DelicateCoroutinesApi::class)
 @Composable
 fun SignIn(navController: NavController,singInViewModel: SignInViewModel= hiltViewModel()){
+    val context= LocalContext.current
     Surface(modifier = Modifier.fillMaxSize(), color = Color.White ) {
+        var errorType by remember {
+            mutableStateOf<Boolean?>(null)
+        }
         var email by remember {
             mutableStateOf("")
         }
@@ -118,6 +130,25 @@ fun SignIn(navController: NavController,singInViewModel: SignInViewModel= hiltVi
             MyButton(
                 action = {
                     singInViewModel.signIn(email, password)
+                    GlobalScope.launch{
+                        singInViewModel.authResults.collect{result ->
+                            when(result){
+                                is AuthResult.Authorized ->{
+                                    navController.popBackStack()
+                                    navController.navigate(Routes.HomeScreen.name)
+                                }
+                                is AuthResult.Unauthorized ->{
+                                    errorType=true
+                                }
+                                is AuthResult.UnknownError ->{
+                                    errorType=false
+                                }
+                            }
+                        }
+                    }
+                    if (errorType!=null) {
+                        if (errorType==true)Toast.makeText(context, "Incorrect email or password", Toast.LENGTH_LONG).show() else Toast.makeText(context, "Unknown Error", Toast.LENGTH_LONG).show()
+                    }
                 },
                 modifier = Modifier.align(Alignment.End),
             )

@@ -8,6 +8,7 @@ import com.example.mycoffeeapp.R
 import com.example.mycoffeeapp.model.Coffee
 import com.example.mycoffeeapp.model.Order
 
+
 class SharedViewModel: ViewModel() {
     var coffee by mutableStateOf<Coffee?>(null)
     var order by mutableStateOf<Order?>(

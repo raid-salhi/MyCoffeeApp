@@ -38,20 +38,18 @@ fun SplashScreen(navController: NavController,splashScreenViewModel: SplashScree
         splashScreenViewModel.authResults.collect{result ->
             when(result){
                 is AuthResult.Authorized ->{
-                    navController.navigate(Routes.HomeScreen.name)
                     navController.popBackStack()
+                    navController.navigate(Routes.HomeScreen.name)
                 }
                 is AuthResult.Unauthorized ->{
-                    navController.navigate(Routes.SignInScreen.name)
                     navController.popBackStack()
+                    navController.navigate(Routes.SignInScreen.name)
                 }
                 is AuthResult.UnknownError ->{
                     Toast.makeText(context, "Unknown Error", Toast.LENGTH_LONG).show()
                 }
             }
-
         }
-        delay(500)
     })
     Box(modifier =Modifier.fillMaxSize() ){
         Image(
