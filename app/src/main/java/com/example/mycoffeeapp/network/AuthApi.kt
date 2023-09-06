@@ -19,9 +19,9 @@ interface AuthApi {
 
     @POST("signin")
     @Headers("Content-Type: application/json")
-    suspend fun signIn(
+     fun signIn(
         @Body request: AuthRequest
-    ): Token
+    ): Call<Token>
 
     @GET("authenticate")
     suspend fun authenticate(

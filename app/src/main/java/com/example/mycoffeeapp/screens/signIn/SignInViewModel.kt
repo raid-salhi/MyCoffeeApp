@@ -21,7 +21,7 @@ class SignInViewModel @Inject constructor(
     private val resultChannel = Channel<AuthResult<Unit>>()
     val authResults = resultChannel.receiveAsFlow()
 
-    fun signIn(email:String,password:String){
+    suspend fun signIn(email:String,password:String){
         viewModelScope.launch {
 
             val result = repository.signIn(

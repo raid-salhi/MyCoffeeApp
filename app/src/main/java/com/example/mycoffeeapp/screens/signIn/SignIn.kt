@@ -1,5 +1,6 @@
 package com.example.mycoffeeapp.screens.signIn
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -62,6 +63,7 @@ import com.example.mycoffeeapp.ui.theme.PrimaryColor
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
@@ -129,9 +131,11 @@ fun SignIn(navController: NavController,singInViewModel: SignInViewModel= hiltVi
             Spacer(modifier = Modifier.height(140.dp))
             MyButton(
                 action = {
-                    singInViewModel.signIn(email, password)
                     GlobalScope.launch{
+                        singInViewModel.signIn(email, password)
+                        delay(1000)
                         singInViewModel.authResults.collect{result ->
+                            Log.d("TAG", "SignIn: $result ")
                             when(result){
                                 is AuthResult.Authorized ->{
                                     navController.popBackStack()
