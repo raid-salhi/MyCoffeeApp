@@ -25,7 +25,7 @@ object AppModule {
     fun provideAuthApi(): AuthApi {
         return Retrofit.Builder()
             .baseUrl("http://192.168.1.118:8080/")
-            .addConverterFactory(MoshiConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(AuthApi::class.java)
     }
