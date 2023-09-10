@@ -1,17 +1,23 @@
 package com.example.mycoffeeapp.repository
 
+import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
+import com.example.mycoffeeapp.dataStore.StoreToken
 import com.example.mycoffeeapp.model.auth.AuthRequest
 import com.example.mycoffeeapp.model.auth.AuthResult
 import com.example.mycoffeeapp.model.auth.Token
 import com.example.mycoffeeapp.network.AuthApi
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -20,7 +26,9 @@ import retrofit2.HttpException
 import retrofit2.Response
 import kotlin.math.log
 
-class AuthRepositoryIml(  private val api: AuthApi, private val preferences: SharedPreferences) : AuthRepository{
+class AuthRepositoryIml( private val api: AuthApi, private val context: Context) : AuthRepository{
+
+    val tokenStore = StoreToken(context)
     @OptIn(DelicateCoroutinesApi::class)
     override suspend fun signUp(email: String, password: String): AuthResult<Unit> {
         var isLogged = false
@@ -63,6 +71,7 @@ class AuthRepositoryIml(  private val api: AuthApi, private val preferences: Sha
         }
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     override suspend fun signIn(email: String, password: String): AuthResult<Unit> {
             var result = mutableStateOf<AuthResult<Unit>>(AuthResult.UnknownError())
             api.signIn(
@@ -79,10 +88,10 @@ class AuthRepositoryIml(  private val api: AuthApi, private val preferences: Sha
                 override fun onResponse(call: Call<Token>, response: Response<Token>) {
                     if (response.code() == 200) {
                         Log.d("TAG", "signIn: sing in done ${response.body()!!.value}")
-                        preferences.edit()
-                            .putString("jwt", response.body()!!.value)
-                            .apply()
-                       result.value=AuthResult.Authorized()
+                        GlobalScope.launch {
+                            tokenStore.saveData(response.body()!!.value)
+                            result.value=AuthResult.Authorized()
+                        }
                     }
                     else{
                         Log.d("TAG", "signIn: sign in failed ${response.code()}")
@@ -95,7 +104,7 @@ class AuthRepositoryIml(  private val api: AuthApi, private val preferences: Sha
 
     override suspend fun authenticate(): AuthResult<Unit> {
         return try {
-            val token = preferences.getString("jwt", null) ?: return AuthResult.Unauthorized()
+            val token = tokenStore.getData.first()
             api.authenticate("Bearer $token")
             AuthResult.Authorized()
         } catch(e: HttpException) {
