@@ -17,7 +17,7 @@ class StoreToken (private val context: Context){
     }
     val getData: Flow<String?> = context.dataStore.data
         .map { preferences ->
-            preferences[token] ?: ""
+            preferences[token]
         }
 
     suspend fun saveData(name: String) {

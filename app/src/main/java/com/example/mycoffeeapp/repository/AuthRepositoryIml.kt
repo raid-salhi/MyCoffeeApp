@@ -103,12 +103,15 @@ class AuthRepositoryIml( private val api: AuthApi, private val context: Context)
     }
 
     override suspend fun authenticate(): AuthResult<Unit> {
+
         return try {
             val token = tokenStore.getData.first()
             api.authenticate("Bearer $token")
+            Log.d("TAG", "authenticate: $token ")
             AuthResult.Authorized()
         } catch(e: HttpException) {
             if(e.code() == 401) {
+                Log.d("TAG", "authenticate: not possible ")
                 AuthResult.Unauthorized()
             } else {
                 AuthResult.UnknownError()
