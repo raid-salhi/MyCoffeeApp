@@ -12,8 +12,8 @@ I got inspired by this figma template :
 - [Figma Template](https://www.figma.com/community/file/1032782759644907635)
 ## Screenshots
 
-<img src="https://github.com/raid-salhi/MyCoffeeApp/assets/118809948/49be8797-37f7-4e03-a3a6-803b3b733e81" width="350"/>
-<img src="https://github.com/raid-salhi/MyCoffeeApp/assets/118809948/6c2787b0-723b-49cc-b394-6a42d68d24e4" width="350"/>
-<img src="https://github.com/raid-salhi/MyCoffeeApp/assets/118809948/4214fd28-a159-45a0-981d-1c63ee711889" width="350"/>
-<img src="https://github.com/raid-salhi/MyCoffeeApp/assets/118809948/8ecb4372-e929-4440-bbed-346746c1f249" width="350"/>
-<img src="https://github.com/raid-salhi/MyCoffeeApp/assets/118809948/12279750-84bf-4a9e-91e5-70ffc0629315" width="350"/>
+<img src="https://github.com/raid-salhi/MyCoffeeApp/assets/118809948/af272515-0f61-4a83-83a7-8247d288a2cc" width="350"/>
+<img src="https://github.com/raid-salhi/MyCoffeeApp/assets/118809948/bcf7d4b0-ffbb-4ad5-aba3-9e970b437ffc" width="350"/>
+<img src="https://github.com/raid-salhi/MyCoffeeApp/assets/118809948/960e18f0-a544-4b25-a555-e7c384d28672" width="350"/>
+<img src="https://github.com/raid-salhi/MyCoffeeApp/assets/118809948/40477d50-fa08-4982-80ea-80bbd1d6c8b0" width="350"/>
+<img src="https://github.com/raid-salhi/MyCoffeeApp/assets/118809948/a61b7c5d-81e5-4907-9973-2f5ed8e587d4" width="350"/>
