@@ -1,6 +1,5 @@
 package com.example.mycoffeeapp.screens.signUp
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -29,21 +28,17 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.mycoffeeapp.R
 import com.example.mycoffeeapp.componants.MyButton
 import com.example.mycoffeeapp.componants.MyTextField
-import com.example.mycoffeeapp.model.auth.AuthResult
 import com.example.mycoffeeapp.naviagtion.Routes
 import com.example.mycoffeeapp.ui.theme.MainText
 import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 @OptIn(DelicateCoroutinesApi::class)
 @Composable
-fun SignUp(navController: NavController,signUpViewModel: SignUpViewModel= hiltViewModel()){
+fun SignUp(navController: NavController){
     val context= LocalContext.current
     Surface(modifier = Modifier.fillMaxSize(), color = Color.White ) {
         var email by remember {
@@ -125,24 +120,8 @@ fun SignUp(navController: NavController,signUpViewModel: SignUpViewModel= hiltVi
             Spacer(modifier = Modifier.height(14.dp))
             MyButton(
                 action = {
-                    signUpViewModel.signUp(email, password)
-                    GlobalScope.launch{
-                        signUpViewModel.authResults.collect{result ->
-                            when(result){
-                                is AuthResult.Authorized ->{
-                                    navController.popBackStack()
-                                    navController.navigate(Routes.HomeScreen.name)
-                                }
-                                is AuthResult.Unauthorized ->{
-                                    error=true
-                                }
-                                is AuthResult.UnknownError ->{
-                                    error=true
-                                }
-                            }
-                        }
-                    }
-                    if (error) Toast.makeText(context, "Unknown Error", Toast.LENGTH_LONG).show()
+                    navController.popBackStack()
+                    navController.navigate(Routes.HomeScreen.name)
                 },
                 modifier = Modifier.align(Alignment.End))
             Spacer(modifier = Modifier.height(140.dp))

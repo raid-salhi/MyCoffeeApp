@@ -23,33 +23,19 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.mycoffeeapp.R
-import com.example.mycoffeeapp.model.auth.AuthResult
 import com.example.mycoffeeapp.naviagtion.Routes
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 
 @Composable
-fun SplashScreen(navController: NavController,splashScreenViewModel: SplashScreenViewModel= hiltViewModel()) {
+fun SplashScreen(navController: NavController) {
     val context= LocalContext.current
     LaunchedEffect(key1 = true, block = {
-        splashScreenViewModel.authResults.collect{result ->
-            when(result){
-                is AuthResult.Authorized ->{
-                    navController.popBackStack()
-                    navController.navigate(Routes.HomeScreen.name)
-                }
-                is AuthResult.Unauthorized ->{
-                    navController.popBackStack()
-                    navController.navigate(Routes.SignInScreen.name)
-                }
-                is AuthResult.UnknownError ->{
-                    Toast.makeText(context, "Unknown Error", Toast.LENGTH_LONG).show()
-                }
-            }
-        }
+        delay(1000)
+        navController.popBackStack()
+        navController.navigate(Routes.SignInScreen.name)
     })
     Box(modifier =Modifier.fillMaxSize() ){
         Image(
